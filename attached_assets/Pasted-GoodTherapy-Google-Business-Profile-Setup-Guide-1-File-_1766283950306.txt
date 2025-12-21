@@ -1,0 +1,222 @@
+GoodTherapy – Google Business Profile Setup Guide
+
+⸻
+
+1. File structure in Figma
+
+Pages
+	1.	Cover / Notes
+	2.	Design System (light)
+	3.	Core Layout
+	4.	Step Template
+	5.	Special Sections
+	6.	Mobile Layout
+
+⸻
+
+2. Design system (keep this minimal)
+
+Typography
+	•	Heading (H1, H2, H3)
+	•	Body
+	•	Small helper text
+
+No colors yet. Use:
+	•	Dark gray text
+	•	Light gray backgrounds
+	•	One accent placeholder color
+
+Components
+	•	Button (primary, secondary)
+	•	Progress bar
+	•	Step pill (active / completed / inactive)
+	•	Card
+	•	Checklist item
+	•	Tooltip
+	•	Video placeholder
+	•	Screenshot placeholder
+
+⸻
+
+3. Core layout (desktop)
+
+Frame: 1440px width
+
+Layout grid
+	•	12 columns
+	•	Max content width: ~1200px
+	•	Large vertical spacing
+
+Top navigation (sticky)
+	•	Left:
+	•	GoodTherapy logo
+	•	“Integration Guide”
+	•	Center:
+	•	Progress indicator → Step 4 / 17
+	•	Right:
+	•	“Sign in with Google” (secondary button)
+
+⸻
+
+4. Hero section wireframe
+
+Section height: ~80vh
+
+Left column
+	•	H1: “How To Set Up Your Google Business Profile”
+	•	Subtext (2 lines max)
+	•	Meta line: “17 steps • ~25 minutes”
+	•	Primary CTA: “Get started now”
+	•	Secondary text link: “Watch overview (2 min)”
+
+Right column
+	•	Animated background placeholder
+	•	Optional abstract shape or UI mock placeholder
+
+⸻
+
+5. Step navigation system
+
+Desktop
+	•	Sticky left sidebar
+	•	Vertical list:
+	•	Step number
+	•	Step title (short)
+	•	Visual states:
+	•	Completed = check
+	•	Active = highlighted
+	•	Future = muted
+
+Mobile
+	•	Bottom sticky progress bar
+	•	“Step X of 17”
+	•	Next / Previous buttons
+
+⸻
+
+6. Step template (this repeats for all 17)
+
+Frame height: variable
+
+Step header
+	•	Step number (large)
+	•	Step title
+	•	Optional time estimate (“~2 min”)
+
+⸻
+
+Step body (two-column)
+
+Left column
+	•	Short explanation (3–5 lines max)
+	•	“Why this matters” helper text
+	•	Bullet list if needed
+
+Right column
+	•	Screenshot / screen recording placeholder
+	•	Label: “What you’ll see in Google”
+
+⸻
+
+Action block (bottom)
+	•	Checklist (1–3 items)
+	•	Primary button: “Mark step complete”
+	•	Secondary: “I’ll do this later”
+
+⸻
+
+7. Special components you’ll reuse
+
+A. Benefit cards (Step One)
+	•	2x3 card grid
+	•	Icon placeholder
+	•	Title
+	•	One sentence
+
+Hover state: expand slightly.
+
+⸻
+
+B. Definition section (Step Two)
+	•	Left: text
+	•	Right: mock Google listing card
+	•	Highlighted path:
+Google → GoodTherapy → Contact
+
+⸻
+
+C. “Before you start” prep step
+	•	Card stack layout
+	•	Each card = one required item
+	•	Status tag: Required
+
+⸻
+
+D. Location choice step
+	•	Two large selectable cards:
+	•	Physical office
+	•	Online / service area
+	•	Selected state highlights card
+	•	Conditional note below
+
+⸻
+
+E. Verification step
+	•	Vertical option list:
+	•	Postcard
+	•	Phone
+	•	Email
+	•	Each option as a card
+	•	Info note under each
+
+⸻
+
+F. Process animation step (Step Fifteen)
+	•	Horizontal flow wireframe:
+	1.	Search
+	2.	Google profile
+	3.	GoodTherapy profile
+	4.	Contact
+	•	Scroll-triggered reveal (noted in comments)
+
+⸻
+
+G. Privacy & ethics step
+	•	Two columns:
+	•	❌ Don’ts
+	•	✅ Do’s
+	•	Lock icon placeholder
+
+⸻
+
+8. Final checklist screen
+
+Centered layout
+	•	Completion headline
+	•	Checklist summary
+	•	Status indicators:
+	•	Profile claimed
+	•	Verified
+	•	Linked to GoodTherapy
+
+CTAs
+	•	“Email checklist”
+	•	“Download PDF”
+	•	“Done”
+
+Add a subtle success state note.
+
+⸻
+
+9. Mobile wireframe notes
+
+Key rules
+	•	One column only
+	•	Screenshots stack under text
+	•	Sticky bottom bar:
+	•	Progress
+	•	Next step button
+
+Hero
+	•	Shorter height
+	•	CTA always visible
