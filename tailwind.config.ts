@@ -36,6 +36,11 @@ export default {
           foreground: "hsl(var(--secondary-foreground) / <alpha-value>)",
           border: "var(--secondary-border)",
         },
+        tertiary: {
+          DEFAULT: "hsl(var(--tertiary) / <alpha-value>)",
+          foreground: "hsl(var(--tertiary-foreground) / <alpha-value>)",
+          border: "var(--tertiary-border)",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted) / <alpha-value>)",
           foreground: "hsl(var(--muted-foreground) / <alpha-value>)",

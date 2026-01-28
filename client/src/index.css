@@ -5,34 +5,38 @@
 @tailwind utilities;
 
 :root {
-  /* GoodTherapy Brand Colors */
-  /* Orange #F58220 -> HSL(28, 90%, 54%) */
-  /* Blue #0056b3 -> HSL(211, 100%, 35%) */
-  
+  /* GoodTherapy Brand Colors - Updated */
+  /* Green #A2AD1A -> HSL(68, 68%, 38%) - PRIMARY */
+  /* Orange #E06D00 -> HSL(26, 100%, 44%) - SECONDARY */
+  /* Blue #0056b3 -> HSL(211, 100%, 35%) - TERTIARY */
+
   --background: 210 20% 98%;
   --foreground: 222 47% 11%;
-  
-  --primary: 28 90% 54%;
+
+  --primary: 68 68% 38%;
   --primary-foreground: 210 40% 98%;
-  
-  --secondary: 211 100% 35%;
+
+  --secondary: 26 100% 44%;
   --secondary-foreground: 210 40% 98%;
-  
+
+  --tertiary: 211 100% 35%;
+  --tertiary-foreground: 210 40% 98%;
+
   --muted: 210 40% 93%;
   --muted-foreground: 215 16% 47%;
-  
+
   --accent: 210 40% 96%;
   --accent-foreground: 222 47% 11%;
-  
+
   --destructive: 0 84% 60%;
   --destructive-foreground: 210 40% 98%;
-  
+
   --border: 214 32% 91%;
   --input: 214 32% 91%;
-  --ring: 28 90% 54%;
-  
+  --ring: 68 68% 38%;
+
   --radius: 0.75rem;
-  
+
   --font-sans: 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
 }
@@ -46,7 +50,8 @@
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply font-bold tracking-tight text-secondary;
+    @apply font-bold tracking-tight;
+    color: hsl(var(--tertiary));
   }
 }
 

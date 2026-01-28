@@ -46,7 +46,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-orange-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-green-50 relative overflow-hidden">
       {/* Animated background shapes */}
       <motion.div
         className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl"
@@ -67,12 +67,11 @@ export default function LandingPage() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-3"
         >
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">G</span>
-          </div>
-          <span className="text-xl font-bold text-secondary hidden sm:inline">
-            GoodTherapy
-          </span>
+          <img
+            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+            alt="GoodTherapy"
+            className="h-10 w-auto"
+          />
         </motion.div>
 
         <motion.div
@@ -172,7 +171,7 @@ export default function LandingPage() {
                 whileHover={{ rotateZ: -8 }}
               >
                 <div className="space-y-6">
-                  <div className="bg-orange-100/50 h-3 rounded-full w-24" />
+                  <div className="bg-green-100/50 h-3 rounded-full w-24" />
                   <div className="space-y-2">
                     <div className="bg-muted h-3 rounded-full w-full" />
                     <div className="bg-muted h-3 rounded-full w-5/6" />
