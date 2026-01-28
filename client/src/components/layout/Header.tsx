@@ -42,13 +42,11 @@ export function Header({ currentStep, completedSteps, onStepClick }: HeaderProps
 
         {/* Logo Area */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-orange-400 rounded-lg flex items-center justify-center text-white font-bold font-display shadow-md shadow-primary/20">
-            GT
-          </div>
-          <span className="font-display font-bold text-lg tracking-tight hidden sm:inline-block">
-            <span className="text-secondary">Good</span>
-            <span className="text-primary">Therapy</span>
-          </span>
+          <img
+            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+            alt="GoodTherapy"
+            className="h-8 w-auto"
+          />
           <div className="hidden md:block h-6 w-px bg-border mx-2" />
           <span className="text-sm font-medium text-muted-foreground hidden md:block">
             Business Profile Guide
