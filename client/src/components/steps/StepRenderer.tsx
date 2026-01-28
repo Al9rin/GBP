@@ -4,7 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { ReferralFlowDiagram, VerificationMethodsCarousel } from "@/components/animated/MotionGraphics";
-import { GoogleSearchMockup, GoogleMapsMockup, ShareLinkMockup } from "@/components/animated/ScreenshotMockups";
+import {
+  GoogleSearchMockup,
+  GoogleMapsMockup,
+  ShareLinkMockup,
+  GBPDashboardMockup,
+  FormMockup,
+  CategoryMockup,
+  HoursPickerMockup,
+  PhotoUploadMockup,
+  AppointmentLinkMockup,
+  PrivacyReminderMockup,
+  VerificationPostcardMockup
+} from "@/components/animated/ScreenshotMockups";
+import { Phone, Globe, Building2 } from "lucide-react";
 
 interface StepRendererProps {
   stepIndex: number;
@@ -81,22 +94,18 @@ export function StepRenderer({ stepIndex, onComplete, isCompleted, isPending }: 
 /* --- Step Graphics (Mockups & Animations) --- */
 function StepGraphic({ stepId }: { stepId: number }) {
   switch(stepId) {
+    // Step 1: Introduction - Referral flow
     case 1:
-    case 3:
-    case 15:
       return (
         <div className="my-8">
-          <ReferralFlowDiagram
-            autoPlay
-            loop
-            variant={stepId === 15 ? 'detailed' : 'simple'}
-          />
+          <ReferralFlowDiagram autoPlay loop variant="simple" />
         </div>
       );
 
+    // Step 2: What is GBP - Search & Maps
     case 2:
       return (
-        <div className="grid md:grid-cols-2 gap-6 my-8">
+        <div className="grid lg:grid-cols-2 gap-6 my-8">
           <GoogleSearchMockup
             practiceExample={{
               name: "Example Therapy Practice",
@@ -108,6 +117,46 @@ function StepGraphic({ stepId }: { stepId: number }) {
         </div>
       );
 
+    // Step 3: Why this supports referrals - Referral flow
+    case 3:
+      return (
+        <div className="my-8">
+          <ReferralFlowDiagram autoPlay loop variant="simple" />
+        </div>
+      );
+
+    // Step 4: Gather details - No mockup (just checklist in content)
+
+    // Step 5: Sign in - GBP Dashboard
+    case 5:
+      return (
+        <div className="my-8">
+          <GBPDashboardMockup />
+        </div>
+      );
+
+    // Step 6: Practice name - Form with name field
+    case 6:
+      return (
+        <div className="my-8">
+          <FormMockup
+            fields={[
+              { label: "Business name", value: "Example Therapy Practice", icon: Building2 }
+            ]}
+            highlightField="Business name"
+          />
+        </div>
+      );
+
+    // Step 7: Category - Category picker
+    case 7:
+      return (
+        <div className="my-8">
+          <CategoryMockup />
+        </div>
+      );
+
+    // Step 8: Location choice - Map with service area
     case 8:
       return (
         <div className="my-8">
@@ -115,20 +164,79 @@ function StepGraphic({ stepId }: { stepId: number }) {
         </div>
       );
 
-    case 10:
+    // Step 9: Contact details - Form with phone & website
+    case 9:
       return (
         <div className="my-8">
-          <VerificationMethodsCarousel autoRotate interval={3000} />
+          <FormMockup
+            fields={[
+              { label: "Phone number", value: "(555) 123-4567", icon: Phone },
+              { label: "Website", value: "https://www.goodtherapy.org/therapists/profile/...", icon: Globe }
+            ]}
+            highlightField="Website"
+          />
         </div>
       );
 
+    // Step 10: Verification - Carousel
+    case 10:
+      return (
+        <div className="my-8 space-y-6">
+          <VerificationMethodsCarousel autoRotate interval={3000} />
+          <VerificationPostcardMockup />
+        </div>
+      );
+
+    // Step 11: Practice details - Hours picker
+    case 11:
+      return (
+        <div className="my-8">
+          <HoursPickerMockup />
+        </div>
+      );
+
+    // Step 12: Appointment link - Appointment button mockup
+    case 12:
+      return (
+        <div className="my-8">
+          <AppointmentLinkMockup />
+        </div>
+      );
+
+    // Step 13: Photos - Photo upload
+    case 13:
+      return (
+        <div className="my-8">
+          <PhotoUploadMockup />
+        </div>
+      );
+
+    // Step 14: Send GBP link - Share link flow
     case 14:
       return (
-        <div className="grid md:grid-cols-2 gap-6 my-8">
+        <div className="grid lg:grid-cols-2 gap-6 my-8">
           <ShareLinkMockup platform="desktop" autoPlay />
           <ShareLinkMockup platform="mobile" autoPlay />
         </div>
       );
+
+    // Step 15: Discovery to contact - Detailed referral flow
+    case 15:
+      return (
+        <div className="my-8">
+          <ReferralFlowDiagram autoPlay loop variant="detailed" />
+        </div>
+      );
+
+    // Step 16: Privacy - Privacy reminder card
+    case 16:
+      return (
+        <div className="my-8">
+          <PrivacyReminderMockup />
+        </div>
+      );
+
+    // Step 17: Final checklist - No mockup (interactive checklist in content)
 
     default:
       return null;

@@ -25,18 +25,18 @@ export function DeviceFrame({
         className={`rounded-lg border border-border shadow-2xl overflow-hidden bg-white ${className}`}
       >
         {/* Browser chrome */}
-        <div className="bg-slate-100 border-b border-border px-4 py-3 flex items-center gap-2">
+        <div className="bg-slate-100 border-b border-border px-3 py-2 flex items-center gap-2 flex-shrink-0">
           {/* Traffic lights */}
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
           </div>
 
           {/* Address bar */}
-          <div className="flex-1 mx-4 bg-white rounded px-3 py-1.5 text-xs text-muted-foreground border border-border flex items-center gap-2">
+          <div className="flex-1 mx-3 bg-white rounded px-2.5 py-1 text-[11px] text-muted-foreground border border-border flex items-center gap-1.5">
             <svg
-              className="w-4 h-4 text-slate-400"
+              className="w-3 h-3 text-slate-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export function DeviceFrame({
           </div>
 
           {/* Menu dots */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-0.5">
             <div className="w-1 h-1 rounded-full bg-slate-400" />
             <div className="w-1 h-1 rounded-full bg-slate-400" />
             <div className="w-1 h-1 rounded-full bg-slate-400" />
@@ -60,7 +60,7 @@ export function DeviceFrame({
         </div>
 
         {/* Content */}
-        <div className="bg-white">{children}</div>
+        <div className="bg-white overflow-hidden">{children}</div>
       </motion.div>
     );
   }
