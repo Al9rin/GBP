@@ -26,10 +26,10 @@ export function ReferralFlowDiagram({
         { id: 4, icon: Phone, label: "Contact You", color: "primary", description: "Request appointment" },
       ]
     : [
-        { id: 1, icon: GoogleSearchIcon, label: "Google", color: "primary" },
-        { id: 2, icon: Building2, label: "Your Listing", color: "secondary" },
-        { id: 3, icon: User, label: "GoodTherapy", color: "tertiary" },
-        { id: 4, icon: Mail, label: "Contact", color: "primary" },
+        { id: 1, icon: GoogleSearchIcon, label: "Google", color: "primary", description: "" },
+        { id: 2, icon: Building2, label: "Your Listing", color: "secondary", description: "" },
+        { id: 3, icon: User, label: "GoodTherapy", color: "tertiary", description: "" },
+        { id: 4, icon: Mail, label: "Contact", color: "primary", description: "" },
       ];
 
   const containerVariants = {

@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, CheckCircle } from "lucide-react";
 import { useState } from "react";
+import { ReferralFlowDiagram, VerificationMethodsCarousel } from "@/components/animated/MotionGraphics";
+import { GoogleSearchMockup, GoogleMapsMockup, ShareLinkMockup } from "@/components/animated/ScreenshotMockups";
 
 interface StepRendererProps {
   stepIndex: number;
@@ -76,32 +78,114 @@ export function StepRenderer({ stepIndex, onComplete, isCompleted, isPending }: 
   );
 }
 
+/* --- Step Graphics (Mockups & Animations) --- */
+function StepGraphic({ stepId }: { stepId: number }) {
+  switch(stepId) {
+    case 1:
+    case 3:
+    case 15:
+      return (
+        <div className="my-8">
+          <ReferralFlowDiagram
+            autoPlay
+            loop
+            variant={stepId === 15 ? 'detailed' : 'simple'}
+          />
+        </div>
+      );
+
+    case 2:
+      return (
+        <div className="grid md:grid-cols-2 gap-6 my-8">
+          <GoogleSearchMockup
+            practiceExample={{
+              name: "Example Therapy Practice",
+              rating: 4.8,
+              type: "Mental health service"
+            }}
+          />
+          <GoogleMapsMockup />
+        </div>
+      );
+
+    case 8:
+      return (
+        <div className="my-8">
+          <GoogleMapsMockup showServiceArea highlightPin />
+        </div>
+      );
+
+    case 10:
+      return (
+        <div className="my-8">
+          <VerificationMethodsCarousel autoRotate interval={3000} />
+        </div>
+      );
+
+    case 14:
+      return (
+        <div className="grid md:grid-cols-2 gap-6 my-8">
+          <ShareLinkMockup platform="desktop" autoPlay />
+          <ShareLinkMockup platform="mobile" autoPlay />
+        </div>
+      );
+
+    default:
+      return null;
+  }
+}
+
 /* --- Content Renderer --- */
 function ContentRenderer({ step }: { step: any }) {
   const content = step.content;
 
   if (!content) {
-    return <GenericContent step={step} />;
+    return (
+      <>
+        <StepGraphic stepId={step.id} />
+        <GenericContent step={step} />
+      </>
+    );
   }
 
   // Special handling for Step 8 (choice type)
   if (step.type === "choice" && step.id === 8) {
-    return <LocationChoiceContent content={content} />;
+    return (
+      <>
+        <StepGraphic stepId={step.id} />
+        <LocationChoiceContent content={content} />
+      </>
+    );
   }
 
   // Special handling for Step 17 (interactive checklist)
   if (step.type === "checklist" && step.id === 17) {
-    return <InteractiveChecklistContent content={content} />;
+    return (
+      <>
+        <StepGraphic stepId={step.id} />
+        <InteractiveChecklistContent content={content} />
+      </>
+    );
   }
 
   // Special handling for Step 4 (display-only checklist)
   if (step.type === "checklist" && step.id === 4) {
-    return <DisplayChecklistContent content={content} />;
+    return (
+      <>
+        <StepGraphic stepId={step.id} />
+        <DisplayChecklistContent content={content} />
+      </>
+    );
   }
 
   // Info type content (most steps)
   if (step.type === "info") {
-    return <InfoContent content={content} />;
+    return (
+      <>
+        <StepGraphic stepId={step.id} />
+        <InfoContent content={content} />
+      </>
+    );
   }
 
   return <GenericContent step={step} />;
