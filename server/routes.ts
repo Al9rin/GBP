@@ -5,6 +5,19 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 
+// Augment Express.User so req.user!.id is typed correctly
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+      claims?: Record<string, unknown>;
+      access_token?: string;
+      refresh_token?: string;
+      expires_at?: number;
+    }
+  }
+}
+
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
   await setupAuth(app);
   registerAuthRoutes(app);

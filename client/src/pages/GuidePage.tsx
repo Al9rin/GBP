@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { StepRenderer } from "@/components/steps/StepRenderer";
 import { MobileControls } from "@/components/layout/MobileControls";
 import { STEPS } from "@/lib/steps-data";
-import { Home, Mail, List, UserPlus, ExternalLink } from "lucide-react";
+import { Home, Mail, List, UserPlus, ExternalLink, ChevronDown } from "lucide-react";
 import { NavBar } from "@/components/ui/tubelight-navbar";
 import { AnimatedBackground } from "@/components/animated/AnimatedBackground";
-import { ScrollDownIndicator } from "@/components/ui/ScrollDownIndicator";
 
 export default function GuidePage() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top on page load
   useEffect(() => {
@@ -39,6 +40,25 @@ export default function GuidePage() {
     if (mainRef.current) {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    // Reset indicator on step change
+    setShowScrollIndicator(true);
+  }, [currentStep]);
+
+  // IntersectionObserver: hide scroll indicator when sentinel (bottom of content) is visible
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    const scrollContainer = mainRef.current;
+    if (!sentinel || !scrollContainer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowScrollIndicator(!entry.isIntersecting);
+      },
+      { root: scrollContainer, threshold: 0.1 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, [currentStep]);
 
   const handleNext = () => {
@@ -124,18 +144,39 @@ export default function GuidePage() {
 
         {/* Main Content Area */}
         <main ref={mainRef} className="flex-1 overflow-y-auto relative custom-scrollbar">
-          <div className="w-full h-full p-4 lg:p-8">
+          <div className="w-full p-4 lg:p-8">
             <StepRenderer
               stepIndex={currentStep}
               onNext={handleNext}
               onPrev={handlePrev}
             />
           </div>
+          {/* Sentinel at bottom of content — IntersectionObserver watches this */}
+          <div ref={sentinelRef} className="h-1" />
+
+          {/* Inline scroll-down indicator: sticky gradient + bouncing arrow */}
+          <AnimatePresence>
+            {showScrollIndicator && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="sticky bottom-0 left-0 right-0 h-24 pointer-events-none z-30 -mt-24"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent" />
+                <motion.div
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2"
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ChevronDown className="w-6 h-6 text-slate-400" strokeWidth={2} />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
-
-      {/* Scroll down indicator - fixed positioned, outside main to avoid overflow clipping */}
-      <ScrollDownIndicator key={currentStep} scrollRef={mainRef} />
 
       <MobileControls
         currentStep={currentStep}

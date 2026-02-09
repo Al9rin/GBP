@@ -601,17 +601,22 @@ function ContentBody({ content, stepId }: any) {
       {content.methods && (
         <div className="grid grid-cols-2 gap-3 my-6">
           {content.methods.map((method: any, idx: number) => {
-            const colors = ['blue', 'green', 'orange', 'purple'];
-            const color = colors[idx % colors.length];
+            const colorMap = [
+              { bg: 'bg-blue-50',   border: 'border-blue-100',   text: 'text-blue-700'   },
+              { bg: 'bg-green-50',  border: 'border-green-100',  text: 'text-green-700'  },
+              { bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-700' },
+              { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-700' },
+            ];
+            const c = colorMap[idx % colorMap.length];
             return (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.08 }}
-                className={`p-4 rounded-xl bg-${color}-50 border border-${color}-100 shadow-sm`}
+                className={`p-4 rounded-xl ${c.bg} border ${c.border} shadow-sm`}
               >
-                <h4 className={`font-bold text-sm text-${color}-700 mb-1`}>{method.name}</h4>
+                <h4 className={`font-bold text-sm ${c.text} mb-1`}>{method.name}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">{method.steps}</p>
               </motion.div>
             );
