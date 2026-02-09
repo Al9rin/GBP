@@ -66,6 +66,14 @@ export async function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // Skip OIDC setup for local development
+  if (process.env.REPL_ID === 'local-dev-placeholder') {
+    console.log("Running in local development mode - skipping Replit Auth");
+    passport.serializeUser((user: Express.User, cb) => cb(null, user));
+    passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+    return;
+  }
+
   const config = await getOidcConfig();
 
   const verify: VerifyFunction = async (
@@ -131,6 +139,13 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  // Allow all requests in local development
+  if (process.env.REPL_ID === 'local-dev-placeholder') {
+    // Mock a user for local development
+    (req as any).user = { id: 'local-dev-user', claims: { sub: 'local-dev-user' } };
+    return next();
+  }
+
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {

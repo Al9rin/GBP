@@ -1,672 +1,717 @@
 import { STEPS } from "@/lib/steps-data";
-import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, CheckCircle } from "lucide-react";
-import { useState } from "react";
-import { ReferralFlowDiagram, VerificationMethodsCarousel } from "@/components/animated/MotionGraphics";
 import {
-  GoogleSearchMockup,
-  GoogleMapsMockup,
-  ShareLinkMockup,
-  GBPDashboardMockup,
-  FormMockup,
-  CategoryMockup,
-  HoursPickerMockup,
-  PhotoUploadMockup,
-  AppointmentLinkMockup,
-  PrivacyReminderMockup,
-  VerificationPostcardMockup
-} from "@/components/animated/ScreenshotMockups";
-import { Phone, Globe, Building2 } from "lucide-react";
+  ArrowRight, CheckCircle, Sparkles, Search, Globe, TrendingUp,
+  ClipboardCheck, LogIn, Building2, Tags, MapPin, Phone, Shield,
+  Clock, Calendar, Camera, Send, ArrowRightCircle, Lock, ListChecks,
+  Lightbulb, Info, AlertTriangle, ChevronRight, ExternalLink
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { GoogleSearchMockup, GoogleMapsMockup } from "@/components/animated/ScreenshotMockups";
+import IntroductionVisual from "@/components/animated/IntroductionVisual";
+import {
+  Step3Visual, Step4Visual, Step5Visual, Step6Visual, Step7Visual,
+  Step8Visual, Step9Visual, Step10Visual, Step11Visual, Step12Visual,
+  Step13Visual, Step14Visual, Step15Visual, Step16Visual, Step17Visual
+} from "./StepVisuals";
+import { cn } from "@/lib/utils";
 
 interface StepRendererProps {
   stepIndex: number;
-  onComplete: () => void;
-  isCompleted: boolean;
-  isPending: boolean;
+  onNext: () => void;
 }
 
-export function StepRenderer({ stepIndex, onComplete, isCompleted, isPending }: StepRendererProps) {
+// Map icons
+const STEP_ICONS = [
+  Sparkles, Globe, TrendingUp, ClipboardCheck, LogIn, Building2,
+  Tags, MapPin, Phone, Shield, Clock, Calendar, Camera, Send,
+  ArrowRightCircle, Lock, ListChecks
+];
+
+export function StepRenderer({ stepIndex, onNext }: StepRendererProps) {
   const step = STEPS[stepIndex];
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-    exit: { opacity: 0, y: -20, transition: { duration: 0.2 } }
-  };
+  const isLastStep = stepIndex === STEPS.length - 1;
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={stepIndex}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        className="max-w-3xl mx-auto space-y-8"
-      >
-        {/* Step Header */}
-        <div className="space-y-4 text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-50 text-primary mb-2 shadow-inner">
-            <step.icon className="w-8 h-8" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-display font-bold text-secondary">
-            {step.title}
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            {step.description}
-          </p>
-        </div>
+    <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 py-6">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={stepIndex}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full"
+        >
+          {/* Main Card Container */}
+          <div className="relative bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 min-h-[600px] p-8 lg:p-16">
 
-        {/* Dynamic Content */}
-        <div className="bg-white rounded-2xl border border-border/60 shadow-xl shadow-slate-200/50 p-6 md:p-10 min-h-[400px] flex flex-col">
-          <div className="flex-1">
-            <ContentRenderer step={step} />
-          </div>
+            {/* 1. Header & Text Content */}
+            <div className="max-w-3xl mx-auto text-center mb-10">
+              {/* Step Badge */}
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-500 text-white font-bold text-lg mb-5 shadow-md shadow-orange-500/20"
+              >
+                {step.id}
+              </motion.div>
 
-          {/* Action Area */}
-          <div className="mt-10 pt-6 border-t border-border flex justify-end">
-            <Button
-              onClick={onComplete}
-              disabled={isPending}
-              size="lg"
-              className={`
-                px-8 py-6 text-lg font-semibold rounded-xl transition-all duration-300
-                ${isCompleted
-                  ? "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200"
-                  : "bg-gradient-to-r from-primary to-green-600 text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1"}
-              `}
+              {/* Title */}
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-4xl lg:text-5xl font-display font-bold text-orange-500 mb-4 leading-tight tracking-tight"
+              >
+                {step.title}
+              </motion.h1>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="text-lg text-slate-500 font-medium mb-8 leading-relaxed"
+              >
+                {step.description}
+              </motion.p>
+
+              {/* Body Content */}
+              <div className="text-left max-w-none">
+                <ContentBody content={step.content} stepId={step.id} />
+              </div>
+            </div>
+
+            {/* 2. Visual for this step */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="w-full max-w-4xl mx-auto mb-16 relative z-10"
             >
-              {isPending ? "Saving..." : isCompleted ? (
-                <>Completed <Check className="ml-2 w-5 h-5" /></>
-              ) : (
-                <>Mark as Complete <ArrowRight className="ml-2 w-5 h-5" /></>
-              )}
-            </Button>
+              <StepVisual stepId={step.id} />
+            </motion.div>
+
+            {/* 3. Footer: Coming Up + Button */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="max-w-3xl mx-auto pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6"
+            >
+              {/* Coming Up Section */}
+              <div className="text-center md:text-left">
+                {!isLastStep && STEPS[stepIndex + 1] && (
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Coming Up Next</span>
+                    <h4 className="text-sm font-semibold text-slate-700">{STEPS[stepIndex + 1].title}</h4>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Button */}
+              <ShimmerButton
+                onClick={onNext}
+                disabled={isLastStep}
+                className="h-14 px-10 shadow-xl shadow-green-500/20 w-full md:w-auto"
+                background="linear-gradient(135deg, #16a34a 0%, #15803d 100%)"
+              >
+                <span className="text-lg font-bold tracking-wide mr-2 text-white">
+                  {isLastStep ? "Complete Guide" : "Next Step"}
+                </span>
+                <ArrowRight className="w-5 h-5 opacity-90 text-white group-hover:translate-x-1 transition-transform" />
+              </ShimmerButton>
+            </motion.div>
+
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                          Step Visual Router                                 */
+/* -------------------------------------------------------------------------- */
+
+function StepVisual({ stepId }: { stepId: number }) {
+  switch (stepId) {
+    case 1: return <IntroductionVisual />;
+    case 2: return <StepTwoVisual />;
+    case 3: return <Step3Visual />;
+    case 4: return <Step4Visual />;
+    case 5: return <Step5Visual />;
+    case 6: return <Step6Visual />;
+    case 7: return <Step7Visual />;
+    case 8: return <Step8Visual />;
+    case 9: return <Step9Visual />;
+    case 10: return <Step10Visual />;
+    case 11: return <Step11Visual />;
+    case 12: return <Step12Visual />;
+    case 13: return <Step13Visual />;
+    case 14: return <Step14Visual />;
+    case 15: return <Step15Visual />;
+    case 16: return <Step16Visual />;
+    case 17: return <Step17Visual />;
+    default: return null;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                     Step 2 Visual (kept inline)                             */
+/* -------------------------------------------------------------------------- */
+
+function StepTwoVisual() {
+  const [mode, setMode] = useState<'search' | 'maps'>('search');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setMode(prev => prev === 'search' ? 'maps' : 'search');
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="w-full relative max-w-3xl mx-auto">
+      <div className="w-full aspect-[4/3] bg-white rounded-2xl shadow-2xl overflow-hidden border-[6px] border-slate-900/5 ring-1 ring-slate-900/5 relative">
+        <div className="h-9 bg-slate-50 border-b flex items-center px-4 gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-400/80" />
+            <div className="w-3 h-3 rounded-full bg-amber-400/80" />
+            <div className="w-3 h-3 rounded-full bg-green-400/80" />
+          </div>
+          <div className="flex-1 mx-4 h-6 bg-white rounded-md border border-slate-200 shadow-sm flex items-center justify-center text-[10px] text-slate-400 font-medium">
+            google.com
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
-  );
-}
-
-/* --- Step Graphics (Mockups & Animations) --- */
-function StepGraphic({ stepId }: { stepId: number }) {
-  switch(stepId) {
-    // Step 1: Introduction - Referral flow
-    case 1:
-      return (
-        <div className="my-8">
-          <ReferralFlowDiagram autoPlay loop variant="simple" />
+        <div className="relative w-full h-full bg-slate-100">
+          <AnimatePresence mode="wait">
+            {mode === 'search' ? (
+              <motion.div
+                key="search"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
+              >
+                <div className="w-[125%] h-[125%] origin-top-left transform scale-[0.80]">
+                  <GoogleSearchMockup />
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="maps"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
+              >
+                <div className="w-[125%] h-[125%] origin-top-left transform scale-[0.80]">
+                  <GoogleMapsMockup highlightPin={true} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      );
-
-    // Step 2: What is GBP - Search & Maps
-    case 2:
-      return (
-        <div className="grid lg:grid-cols-2 gap-6 my-8">
-          <GoogleSearchMockup
-            practiceExample={{
-              name: "Example Therapy Practice",
-              rating: 4.8,
-              type: "Mental health service"
-            }}
-          />
-          <GoogleMapsMockup />
-        </div>
-      );
-
-    // Step 3: Why this supports referrals - Referral flow
-    case 3:
-      return (
-        <div className="my-8">
-          <ReferralFlowDiagram autoPlay loop variant="simple" />
-        </div>
-      );
-
-    // Step 4: Gather details - No mockup (just checklist in content)
-
-    // Step 5: Sign in - GBP Dashboard
-    case 5:
-      return (
-        <div className="my-8">
-          <GBPDashboardMockup />
-        </div>
-      );
-
-    // Step 6: Practice name - Form with name field
-    case 6:
-      return (
-        <div className="my-8">
-          <FormMockup
-            fields={[
-              { label: "Business name", value: "Example Therapy Practice", icon: Building2 }
-            ]}
-            highlightField="Business name"
-          />
-        </div>
-      );
-
-    // Step 7: Category - Category picker
-    case 7:
-      return (
-        <div className="my-8">
-          <CategoryMockup />
-        </div>
-      );
-
-    // Step 8: Location choice - Map with service area
-    case 8:
-      return (
-        <div className="my-8">
-          <GoogleMapsMockup showServiceArea highlightPin />
-        </div>
-      );
-
-    // Step 9: Contact details - Form with phone & website
-    case 9:
-      return (
-        <div className="my-8">
-          <FormMockup
-            fields={[
-              { label: "Phone number", value: "(555) 123-4567", icon: Phone },
-              { label: "Website", value: "https://www.goodtherapy.org/therapists/profile/...", icon: Globe }
-            ]}
-            highlightField="Website"
-          />
-        </div>
-      );
-
-    // Step 10: Verification - Carousel
-    case 10:
-      return (
-        <div className="my-8 space-y-6">
-          <VerificationMethodsCarousel autoRotate interval={3000} />
-          <VerificationPostcardMockup />
-        </div>
-      );
-
-    // Step 11: Practice details - Hours picker
-    case 11:
-      return (
-        <div className="my-8">
-          <HoursPickerMockup />
-        </div>
-      );
-
-    // Step 12: Appointment link - Appointment button mockup
-    case 12:
-      return (
-        <div className="my-8">
-          <AppointmentLinkMockup />
-        </div>
-      );
-
-    // Step 13: Photos - Photo upload
-    case 13:
-      return (
-        <div className="my-8">
-          <PhotoUploadMockup />
-        </div>
-      );
-
-    // Step 14: Send GBP link - Share link flow
-    case 14:
-      return (
-        <div className="grid lg:grid-cols-2 gap-6 my-8">
-          <ShareLinkMockup platform="desktop" autoPlay />
-          <ShareLinkMockup platform="mobile" autoPlay />
-        </div>
-      );
-
-    // Step 15: Discovery to contact - Detailed referral flow
-    case 15:
-      return (
-        <div className="my-8">
-          <ReferralFlowDiagram autoPlay loop variant="detailed" />
-        </div>
-      );
-
-    // Step 16: Privacy - Privacy reminder card
-    case 16:
-      return (
-        <div className="my-8">
-          <PrivacyReminderMockup />
-        </div>
-      );
-
-    // Step 17: Final checklist - No mockup (interactive checklist in content)
-
-    default:
-      return null;
-  }
-}
-
-/* --- Content Renderer --- */
-function ContentRenderer({ step }: { step: any }) {
-  const content = step.content;
-
-  if (!content) {
-    return (
-      <>
-        <StepGraphic stepId={step.id} />
-        <GenericContent step={step} />
-      </>
-    );
-  }
-
-  // Special handling for Step 8 (choice type)
-  if (step.type === "choice" && step.id === 8) {
-    return (
-      <>
-        <StepGraphic stepId={step.id} />
-        <LocationChoiceContent content={content} />
-      </>
-    );
-  }
-
-  // Special handling for Step 17 (interactive checklist)
-  if (step.type === "checklist" && step.id === 17) {
-    return (
-      <>
-        <StepGraphic stepId={step.id} />
-        <InteractiveChecklistContent content={content} />
-      </>
-    );
-  }
-
-  // Special handling for Step 4 (display-only checklist)
-  if (step.type === "checklist" && step.id === 4) {
-    return (
-      <>
-        <StepGraphic stepId={step.id} />
-        <DisplayChecklistContent content={content} />
-      </>
-    );
-  }
-
-  // Info type content (most steps)
-  if (step.type === "info") {
-    return (
-      <>
-        <StepGraphic stepId={step.id} />
-        <InfoContent content={content} />
-      </>
-    );
-  }
-
-  return <GenericContent step={step} />;
-}
-
-/* --- Info Content (handles various content structures) --- */
-function InfoContent({ content }: { content: any }) {
-  return (
-    <div className="space-y-6 prose prose-slate max-w-none">
-      {/* Intro text */}
-      {content.intro && (
-        <p className="text-base text-foreground/80 leading-relaxed">{content.intro}</p>
-      )}
-
-      {/* Paragraphs */}
-      {content.paragraphs && Array.isArray(content.paragraphs) && content.paragraphs.map((para: string, idx: number) => (
-        <p key={idx} className="text-base text-foreground/80 leading-relaxed">{para}</p>
-      ))}
-
-      {/* Heading */}
-      {content.heading && (
-        <h3 className="text-lg font-semibold text-secondary mt-6">{content.heading}</h3>
-      )}
-
-      {/* List */}
-      {content.list && Array.isArray(content.list) && (
-        <ul className="list-disc list-inside space-y-2">
-          {content.list.map((item: string, idx: number) => (
-            <li key={idx} className="text-foreground/80">{item}</li>
-          ))}
-        </ul>
-      )}
-
-      {/* Flow Steps (numbered list for Step 3, 15) */}
-      {content.flowSteps && Array.isArray(content.flowSteps) && (
-        <ol className="list-decimal list-inside space-y-2 bg-slate-50 p-4 rounded-lg">
-          {content.flowSteps.map((item: string, idx: number) => (
-            <li key={idx} className="text-foreground/80">{item}</li>
-          ))}
-        </ol>
-      )}
-
-      {/* Steps (numbered instructions) */}
-      {content.steps && Array.isArray(content.steps) && (
-        <ol className="list-decimal list-inside space-y-2">
-          {content.steps.map((item: string, idx: number) => (
-            <li key={idx} className="text-foreground/80">{item}</li>
-          ))}
-        </ol>
-      )}
-
-      {/* Sections (for Step 11, 14) */}
-      {content.sections && Array.isArray(content.sections) && content.sections.map((section: any, idx: number) => (
-        <div key={idx} className="mt-6">
-          {section.heading && (
-            <h4 className="text-md font-semibold text-secondary mb-3">{section.heading}</h4>
-          )}
-          {section.bullets && (
-            <ul className="list-disc list-inside space-y-2">
-              {section.bullets.map((item: string, i: number) => (
-                <li key={i} className="text-foreground/80">{item}</li>
-              ))}
-            </ul>
-          )}
-          {section.paragraphs && section.paragraphs.map((para: string, i: number) => (
-            <p key={i} className="text-base text-foreground/80 leading-relaxed">{para}</p>
-          ))}
-          {section.steps && (
-            <ol className="list-decimal list-inside space-y-2">
-              {section.steps.map((item: string, i: number) => (
-                <li key={i} className="text-foreground/80">{item}</li>
-              ))}
-            </ol>
-          )}
-          {section.example && (
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-3">
-              <p className="text-sm italic text-blue-900">Example: {section.example}</p>
-            </div>
-          )}
-        </div>
-      ))}
-
-      {/* Methods (for Step 10) */}
-      {content.methods && Array.isArray(content.methods) && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          {content.methods.map((method: any, idx: number) => (
-            <div key={idx} className="p-4 rounded-lg border border-border bg-slate-50">
-              <h5 className="font-semibold text-secondary mb-1">{method.name}</h5>
-              <p className="text-sm text-foreground/70">{method.steps}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Guidelines (for Step 16) */}
-      {content.guidelines && Array.isArray(content.guidelines) && (
-        <ul className="list-disc list-inside space-y-2 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
-          {content.guidelines.map((item: string, idx: number) => (
-            <li key={idx} className="text-foreground/80">{item}</li>
-          ))}
-        </ul>
-      )}
-
-      {/* Example */}
-      {content.example && !content.sections && (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-          <p className="text-sm italic text-blue-900">{content.example}</p>
-        </div>
-      )}
-
-      {/* Tip */}
-      {content.tip && (
-        <div className="bg-orange-50 p-4 rounded-lg border border-orange-100 mt-4">
-          <p className="text-sm"><span className="font-bold text-secondary">Tip:</span> {content.tip}</p>
-        </div>
-      )}
-
-      {/* Note */}
-      {content.note && (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-          <p className="text-sm text-blue-900">{content.note}</p>
-        </div>
-      )}
-
-      {/* Privacy Tip (Step 13) */}
-      {content.privacyTip && (
-        <div className="bg-red-50 p-4 rounded-lg border border-red-100 mt-4">
-          <p className="text-sm"><span className="font-bold text-red-700">Privacy tip:</span> {content.privacyTip}</p>
-        </div>
-      )}
-
-      {/* Conclusion (Step 17) */}
-      {content.conclusion && (
-        <p className="text-base font-medium text-green-700 bg-green-50 p-4 rounded-lg border border-green-100 mt-6">
-          {content.conclusion}
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* --- Display-Only Checklist (Step 4) --- */
-function DisplayChecklistContent({ content }: { content: any }) {
-  return (
-    <div className="space-y-6">
-      {content.intro && (
-        <p className="text-base text-foreground/80 mb-4">{content.intro}</p>
-      )}
-
-      <div className="space-y-3">
-        {content.items && content.items.map((item: string, idx: number) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            className="flex items-start gap-3 p-3 rounded-lg border border-border/50 bg-slate-50 hover:bg-white hover:shadow-sm transition-colors"
-          >
-            <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-primary mt-0.5">
-              <CheckCircle className="w-4 h-4" />
-            </div>
-            <span className="text-sm text-foreground/80 flex-1">{item}</span>
-          </motion.div>
-        ))}
       </div>
-
-      {content.note && (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-          <p className="text-sm text-blue-900">{content.note}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* --- Location Choice Content (Step 8) --- */
-function LocationChoiceContent({ content }: { content: any }) {
-  return (
-    <div className="space-y-6">
-      {content.question && (
-        <p className="text-base text-foreground/80 mb-6">{content.question}</p>
-      )}
-
-      <div className="grid md:grid-cols-2 gap-6">
-        {content.options && content.options.map((option: any, idx: number) => (
-          <div key={idx} className="relative group cursor-pointer border-2 border-transparent hover:border-primary/50 rounded-2xl p-6 bg-slate-50 transition-all hover:bg-white hover:shadow-xl">
-            <h3 className="text-lg font-bold text-slate-900 mb-2">{option.label}</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">{option.description}</p>
-            <div className="absolute inset-x-0 bottom-0 h-1 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
-          </div>
-        ))}
+      <div className="flex justify-center mt-6 gap-4">
+        <button
+          onClick={() => setMode('search')}
+          className={cn("px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm", mode === 'search' ? "bg-orange-100 text-orange-600 shadow-orange-100 ring-2 ring-orange-500/20" : "bg-slate-100 text-slate-400 hover:bg-slate-200")}
+        >
+          Google Search
+        </button>
+        <button
+          onClick={() => setMode('maps')}
+          className={cn("px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm", mode === 'maps' ? "bg-orange-100 text-orange-600 shadow-orange-100 ring-2 ring-orange-500/20" : "bg-slate-100 text-slate-400 hover:bg-slate-200")}
+        >
+          Google Maps
+        </button>
       </div>
-
-      {content.note && (
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mt-4">
-          <p className="text-sm text-blue-900">{content.note}</p>
-        </div>
-      )}
     </div>
   );
 }
 
-/* --- Interactive Checklist (Step 17) --- */
-function InteractiveChecklistContent({ content }: { content: any }) {
-  const [checkedItems, setCheckedItems] = useState<boolean[]>(
-    new Array(content.items?.length || 0).fill(false)
-  );
-  const [showEmailModal, setShowEmailModal] = useState(false);
+/* -------------------------------------------------------------------------- */
+/*                         Improved Content Body                               */
+/* -------------------------------------------------------------------------- */
 
-  const toggleItem = (idx: number) => {
-    setCheckedItems(prev => {
-      const newState = [...prev];
-      newState[idx] = !newState[idx];
-      return newState;
+function ContentBody({ content, stepId }: any) {
+  const processText = (text: string) => {
+    if (!text) return null;
+    const parts = text.split(/(<strong>.*?<\/strong>)/g);
+    return parts.map((part: string, i: number) => {
+      if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
+        return (
+          <span key={i} className="font-extrabold text-slate-900 bg-amber-50 px-2 py-0.5 rounded-md mx-0.5 border border-amber-200 tracking-wide">
+            {part.replace(/<\/?strong>/g, '')}
+          </span>
+        );
+      }
+      return part;
     });
   };
 
-  const completedCount = checkedItems.filter(Boolean).length;
-  const totalCount = content.items?.length || 0;
-
-  const handleEmailClick = (type: 'default' | 'gmail') => {
-    const email = 'editor@goodtherapy.org';
-    const subject = 'Google Business Profile Link';
-    const body = '';
-
-    if (type === 'gmail') {
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
-    } else {
-      window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }
-    setShowEmailModal(false);
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Intro Text */}
       {content.intro && (
-        <p className="text-base font-semibold text-foreground/90 mb-4">{content.intro}</p>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-[15px] text-slate-700 leading-[1.8]"
+        >
+          {processText(content.intro)}
+        </motion.p>
       )}
 
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex justify-between text-sm mb-2">
-          <span className="font-medium text-foreground">Progress</span>
-          <span className="text-muted-foreground">{completedCount} of {totalCount} completed</span>
-        </div>
-        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-primary to-green-600 transition-all duration-500"
-            style={{ width: `${(completedCount / totalCount) * 100}%` }}
-          />
-        </div>
-      </div>
+      {/* Section Heading */}
+      {content.heading && (
+        <motion.h3
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-xl font-bold text-slate-800 flex items-center gap-2 mt-8"
+        >
+          <div className="w-1.5 h-6 bg-orange-400 rounded-full" />
+          {content.heading}
+        </motion.h3>
+      )}
 
-      {/* Checklist Items */}
-      <div className="space-y-3">
-        {content.items && content.items.map((item: string, idx: number) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.05 }}
-            onClick={() => toggleItem(idx)}
-            className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-all ${
-              checkedItems[idx]
-                ? "bg-green-50 border-green-200 hover:border-green-300"
-                : "bg-white border-border/50 hover:border-primary/30 hover:shadow-sm"
-            }`}
-          >
-            <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5 transition-colors ${
-              checkedItems[idx]
-                ? "bg-green-500 text-white"
-                : "bg-slate-100 border-2 border-slate-300"
-            }`}>
-              {checkedItems[idx] && <Check className="w-4 h-4" />}
-            </div>
-            <span className={`text-sm flex-1 ${
-              checkedItems[idx] ? "text-green-900 line-through" : "text-foreground/80"
-            }`}>{item}</span>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* What Happens Next Section */}
-      {content.whatHappensNext && (
-        <div className="mt-8 space-y-6 bg-blue-50 p-6 rounded-lg border border-blue-100">
-          <h3 className="text-lg font-semibold text-secondary mb-4">{content.whatHappensNext.heading}</h3>
-
-          {content.whatHappensNext.sections && content.whatHappensNext.sections.map((section: any, idx: number) => (
-            <div key={idx} className="space-y-3">
-              <h4 className="text-md font-semibold text-blue-900">{section.title}</h4>
-              <ol className="list-decimal list-inside space-y-2 ml-2">
-                {section.steps && section.steps.map((step: string, i: number) => (
-                  <li key={i} className="text-sm text-blue-800">{step}</li>
-                ))}
-              </ol>
-            </div>
+      {/* Feature Cards (Step 2) */}
+      {content.featureList && (
+        <div className="grid md:grid-cols-2 gap-4 my-6">
+          {content.featureList.map((feature: any, idx: number) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                feature.icon === 'search' ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600"
+              )}>
+                {feature.icon === 'search' ? <Search size={20} /> : <MapPin size={20} />}
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-base mb-1">{feature.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">{feature.desc}</p>
+              </div>
+            </motion.div>
           ))}
         </div>
       )}
 
-      {/* Email Button */}
-      <div className="mt-6 text-center">
-        <button
-          onClick={() => setShowEmailModal(true)}
-          className="text-primary hover:text-primary/80 underline font-medium text-base transition-colors"
+      {/* Paragraphs */}
+      {content.paragraphs?.map((p: string, i: number) => (
+        <motion.p
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: i * 0.05 }}
+          className="text-[15px] text-slate-700 leading-[1.8]"
         >
-          Send Google Business Profile Link to GoodTherapy
-        </button>
-      </div>
+          {processText(p)}
+        </motion.p>
+      ))}
 
-      {/* Email Modal */}
-      {showEmailModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowEmailModal(false)}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 className="text-xl font-bold text-secondary mb-4">Choose email client</h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Select how you'd like to send your Google Business Profile link to GoodTherapy:
-            </p>
-
-            <div className="space-y-3">
-              <button
-                onClick={() => handleEmailClick('gmail')}
-                className="w-full p-4 rounded-lg border-2 border-border hover:border-primary/50 hover:bg-green-50 transition-all text-left"
-              >
-                <div className="font-semibold text-foreground">Gmail</div>
-                <div className="text-sm text-muted-foreground">Open in Gmail web interface</div>
-              </button>
-
-              <button
-                onClick={() => handleEmailClick('default')}
-                className="w-full p-4 rounded-lg border-2 border-border hover:border-primary/50 hover:bg-green-50 transition-all text-left"
-              >
-                <div className="font-semibold text-foreground">Default Mail App</div>
-                <div className="text-sm text-muted-foreground">Open in your device's default mail app</div>
-              </button>
-            </div>
-
-            <button
-              onClick={() => setShowEmailModal(false)}
-              className="mt-6 w-full py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      {/* Simple Bullet List */}
+      {content.list && (
+        <ul className="space-y-3.5 my-4">
+          {content.list.map((item: string, i: number) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className="flex items-start gap-3"
             >
-              Cancel
-            </button>
-          </motion.div>
+              <div className="mt-1.5 w-2.5 h-2.5 rounded-full bg-orange-400 shrink-0" />
+              <span className="text-slate-700 text-[15px] leading-[1.8]">{processText(item)}</span>
+            </motion.li>
+          ))}
+        </ul>
+      )}
+
+      {/* Numbered Steps */}
+      {content.steps && (
+        <div className="space-y-3 my-6">
+          {content.steps.map((stepText: string, i: number) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-start gap-4 p-5 rounded-xl bg-gradient-to-br from-blue-50/50 to-slate-50 border border-slate-100 hover:from-blue-50 hover:to-slate-100 transition-all"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-md">
+                {i + 1}
+              </div>
+              <p className="text-[15px] text-slate-700 leading-[1.8] font-medium">{processText(stepText)}</p>
+            </motion.div>
+          ))}
         </div>
       )}
 
-      {content.conclusion && (
-        <div className="bg-green-50 p-4 rounded-lg border border-green-100 mt-6">
-          <p className="text-sm text-green-900 font-medium">{content.conclusion}</p>
+      {/* Flow Steps (Step 3 & 15) */}
+      {content.flowSteps && (
+        <div className="my-6">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
+            {content.flowSteps.map((flowStep: string, i: number) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center gap-2 md:gap-3"
+              >
+                <div className={cn(
+                  "px-4 py-2 rounded-full text-sm font-semibold shadow-sm border",
+                  i === 0 ? "bg-blue-50 text-blue-700 border-blue-200" :
+                  i === content.flowSteps.length - 1 ? "bg-green-50 text-green-700 border-green-200" :
+                  "bg-orange-50 text-orange-700 border-orange-200"
+                )}>
+                  {flowStep}
+                </div>
+                {i < content.flowSteps.length - 1 && (
+                  <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
+                )}
+              </motion.div>
+            ))}
+          </div>
         </div>
+      )}
+
+      {/* Options / Choices (Step 8) */}
+      {content.options && (
+        <div className="space-y-4 my-6">
+          {content.question && (
+            <p className="text-base font-medium text-slate-700 mb-4">{content.question}</p>
+          )}
+          {content.options.map((option: any, idx: number) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className={cn(
+                "p-5 rounded-2xl border-2 transition-all",
+                idx === 0
+                  ? "bg-blue-50/50 border-blue-200 shadow-sm"
+                  : "bg-green-50/50 border-green-200 shadow-sm"
+              )}
+            >
+              <div className="flex items-start gap-3">
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5",
+                  idx === 0 ? "bg-blue-600 text-white" : "bg-green-600 text-white"
+                )}>
+                  {idx === 0 ? <Building2 size={16} /> : <MapPin size={16} />}
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 mb-1">{option.label}</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">{option.description}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Verification Methods (Step 10) */}
+      {content.methods && (
+        <div className="grid grid-cols-2 gap-3 my-6">
+          {content.methods.map((method: any, idx: number) => {
+            const colors = ['blue', 'green', 'orange', 'purple'];
+            const color = colors[idx % colors.length];
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.08 }}
+                className={`p-4 rounded-xl bg-${color}-50 border border-${color}-100 shadow-sm`}
+              >
+                <h4 className={`font-bold text-sm text-${color}-700 mb-1`}>{method.name}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">{method.steps}</p>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Sections (Step 11, 14) */}
+      {content.sections && (
+        <div className="space-y-6 my-6">
+          {content.sections.map((section: any, idx: number) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className="rounded-2xl bg-slate-50/80 border border-slate-100 overflow-hidden"
+            >
+              {section.heading && (
+                <div className="px-5 py-3 bg-slate-100/80 border-b border-slate-200">
+                  <h4 className="font-bold text-slate-800 text-sm">{section.heading}</h4>
+                </div>
+              )}
+              <div className="p-5 space-y-3">
+                {/* Section bullets */}
+                {section.bullets?.map((bullet: string, bi: number) => (
+                  <div key={bi} className="flex items-start gap-3">
+                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <span className="text-[15px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
+                  </div>
+                ))}
+                {/* Section paragraphs */}
+                {section.paragraphs?.map((p: string, pi: number) => (
+                  <p key={pi} className="text-[15px] text-slate-600 leading-[1.8]">{processText(p)}</p>
+                ))}
+                {/* Section steps */}
+                {section.steps?.map((stepText: string, si: number) => (
+                  <div key={si} className="flex items-start gap-3 p-3 rounded-lg bg-white border border-slate-100">
+                    <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                      {si + 1}
+                    </div>
+                    <p className="text-[15px] text-slate-700 leading-[1.8]">{processText(stepText)}</p>
+                  </div>
+                ))}
+              </div>
+              {/* Section example */}
+              {section.example && (
+                <div className="px-5 pb-5">
+                  <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 relative">
+                    <div className="absolute -top-2 left-4 bg-amber-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                      Example
+                    </div>
+                    <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{section.example}</p>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Guidelines (Step 16 privacy) */}
+      {content.guidelines && (
+        <div className="space-y-2.5 my-6">
+          {content.guidelines.map((guideline: string, i: number) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="flex items-start gap-3 p-3 rounded-xl bg-red-50/60 border border-red-100"
+            >
+              <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+                <AlertTriangle size={12} />
+              </div>
+              <span className="text-[15px] text-slate-700 leading-[1.8] font-medium">{guideline}</span>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Tip Callout */}
+      {content.tip && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 shadow-sm ring-1 ring-amber-200/50"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-amber-400 text-white flex items-center justify-center shrink-0">
+              <Lightbulb size={16} />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Pro Tip</span>
+              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.tip)}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Note Callout */}
+      {content.note && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 shadow-md"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+              <Info size={16} />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Note</span>
+              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.note)}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Privacy Tip Callout */}
+      {content.privacyTip && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 shadow-sm"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0">
+              <Shield size={16} />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Privacy</span>
+              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.privacyTip)}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Example Block */}
+      {content.example && !content.sections && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-4 p-5 rounded-2xl bg-amber-50 border border-amber-200 relative"
+        >
+          <div className="absolute -top-2.5 left-4 bg-amber-400 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
+            Example
+          </div>
+          <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{content.example}</p>
+        </motion.div>
+      )}
+
+      {/* Interactive Checklist (Step 4 & 17) */}
+      {content.items && <InteractiveChecklist content={content} stepId={stepId} />}
+
+      {/* What Happens Next (Step 17) */}
+      {content.whatHappensNext && (
+        <div className="mt-8 space-y-6">
+          <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <div className="w-1 h-6 bg-green-500 rounded-full" />
+            {content.whatHappensNext.heading}
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {content.whatHappensNext.sections.map((section: any, idx: number) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className={cn(
+                  "p-5 rounded-2xl border-2 shadow-sm",
+                  idx === 0
+                    ? "bg-orange-50/50 border-orange-200"
+                    : "bg-green-50/50 border-green-200"
+                )}
+              >
+                <h4 className={cn(
+                  "font-bold text-sm mb-3",
+                  idx === 0 ? "text-orange-700" : "text-green-700"
+                )}>
+                  {section.title}
+                </h4>
+                <div className="space-y-2">
+                  {section.steps.map((s: string, si: number) => (
+                    <div key={si} className="flex items-start gap-2">
+                      <div className={cn(
+                        "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5",
+                        idx === 0 ? "bg-orange-500" : "bg-green-600"
+                      )}>
+                        {si + 1}
+                      </div>
+                      <p className="text-xs text-slate-700 leading-relaxed">{processText(s)}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Conclusion */}
+      {content.conclusion && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200"
+        >
+          <p className="text-sm text-slate-700 leading-relaxed font-medium">{processText(content.conclusion)}</p>
+        </motion.div>
       )}
     </div>
   );
 }
 
-/* --- Generic Fallback --- */
-function GenericContent({ step }: { step: any }) {
+/* -------------------------------------------------------------------------- */
+/*                          Interactive Checklist                               */
+/* -------------------------------------------------------------------------- */
+
+function InteractiveChecklist({ content, stepId }: any) {
+  const [checkedItems, setCheckedItems] = useState<boolean[]>(new Array(content.items?.length || 0).fill(false));
+  const toggleItem = (idx: number) => setCheckedItems(prev => { const n = [...prev]; n[idx] = !n[idx]; return n; });
+  const checkedCount = checkedItems.filter(Boolean).length;
+  const total = checkedItems.length;
+
   return (
-    <div className="flex flex-col items-center justify-center h-full text-center space-y-6 py-12">
-      <div className="p-8 bg-slate-50 rounded-full border border-slate-100">
-        <step.icon className="w-16 h-16 text-slate-300" />
+    <div className="rounded-2xl bg-slate-50/80 p-6 border border-slate-100 space-y-4 my-6">
+      {/* Progress header */}
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-bold text-slate-900 text-sm">
+          {stepId === 17 ? "Final Verification" : "Your Checklist"}
+        </h3>
+        <span className="text-xs font-bold text-slate-400">
+          {checkedCount}/{total} complete
+        </span>
       </div>
-      <div className="max-w-md space-y-2">
-        <h3 className="font-bold text-xl text-slate-800">{step.title}</h3>
-        <p className="text-slate-500">
-          Follow the instructions for this step to complete your Google Business Profile setup.
-        </p>
+
+      {/* Progress bar */}
+      <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-green-500 rounded-full"
+          animate={{ width: `${(checkedCount / total) * 100}%` }}
+          transition={{ duration: 0.3 }}
+        />
+      </div>
+
+      {/* Items */}
+      <div className="space-y-2.5 mt-4">
+        {content.items?.map((item: string, idx: number) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: idx * 0.04 }}
+            onClick={() => toggleItem(idx)}
+            className={cn(
+              "flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all bg-white hover:bg-slate-50",
+              checkedItems[idx]
+                ? "border-green-200 shadow-sm shadow-green-100/50"
+                : "border-slate-200"
+            )}
+          >
+            <div className={cn(
+              "w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors",
+              checkedItems[idx] ? "bg-green-500 text-white" : "bg-slate-200 text-slate-400"
+            )}>
+              <CheckCircle size={16} />
+            </div>
+            <span className={cn(
+              "text-sm leading-relaxed transition-colors",
+              checkedItems[idx] ? "text-green-800 line-through opacity-60" : "text-slate-700"
+            )}>
+              {item}
+            </span>
+          </motion.div>
+        ))}
       </div>
     </div>
   );

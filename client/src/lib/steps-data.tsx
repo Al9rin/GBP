@@ -54,13 +54,23 @@ export const STEPS: StepDef[] = [
     icon: Globe,
     type: "info",
     content: {
-      intro: "A Google Business Profile is a free listing that can show up in:",
-      list: [
-        "Google Search",
-        "Google Maps"
+      intro: "A Google Business Profile is a <strong>free listing</strong> that puts your practice on the map.",
+      heading: "It appears in two key places:",
+      featureList: [
+        {
+          title: "Google Search",
+          desc: "When patients search for 'therapist near me' or your name.",
+          icon: "search"
+        },
+        {
+          title: "Google Maps",
+          desc: "Helping locals find your office or service area visually.",
+          icon: "map"
+        }
       ],
       paragraphs: [
-        "It can show key details like your name, phone, hours, location or service area, photos, and a website link. The \"website\" or \"appointment\" link is where we want your GoodTherapy profile to be featured, so people land on your full profile before reaching out."
+        "It showcases your <strong>practice name</strong>, <strong>phone number</strong>, <strong>hours</strong>, and most importantly, your <strong>website link</strong>.",
+        "By linking this to your <strong>GoodTherapy profile</strong>, new patients will land on your trusted, professional bio before reaching out."
       ]
     }
   },

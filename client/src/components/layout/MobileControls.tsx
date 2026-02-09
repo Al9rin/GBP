@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { STEPS } from "@/lib/steps-data";
 import { motion } from "framer-motion";
 
@@ -7,48 +6,55 @@ interface MobileControlsProps {
   currentStep: number;
   onNext: () => void;
   onPrev: () => void;
-  isCompleted: boolean;
 }
 
-export function MobileControls({ currentStep, onNext, onPrev, isCompleted }: MobileControlsProps) {
+export function MobileControls({ currentStep, onNext, onPrev }: MobileControlsProps) {
   const isFirst = currentStep === 0;
   const isLast = currentStep === STEPS.length - 1;
   const progress = ((currentStep + 1) / STEPS.length) * 100;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4 lg:hidden z-40 pb-safe">
-      <div className="flex items-center gap-3 max-w-md mx-auto">
-        <Button
-          variant="outline"
-          size="icon"
+    <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-200/50 p-4 lg:hidden z-40 pb-safe shadow-2xl shadow-slate-200/50">
+      <div className="flex items-center gap-4 max-w-md mx-auto">
+        {/* Previous Button */}
+        <motion.button
+          whileTap={{ scale: 0.95 }}
           onClick={onPrev}
           disabled={isFirst}
-          className="rounded-full"
+          className="rounded-full p-3 border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
         >
-          <ChevronLeft className="w-5 h-5" />
-        </Button>
+          <ChevronLeft className="w-5 h-5 text-slate-600" />
+        </motion.button>
 
-        <div className="flex-1 flex flex-col gap-1">
-          <div className="flex justify-between text-xs font-medium text-slate-500">
+        {/* Progress */}
+        <div className="flex-1 flex flex-col gap-1.5">
+          <div className="flex justify-between text-[10px] font-semibold text-slate-500">
             <span>Step {currentStep + 1}</span>
-            <span>{STEPS.length}</span>
+            <span>{STEPS.length} total</span>
           </div>
-          <div className="h-2 bg-slate-100 rounded-full overflow-hidden w-full">
-            <motion.div 
-              className="h-full bg-primary"
+          <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#A2AD1A] to-green-500"
               animate={{ width: `${progress}%` }}
               transition={{ type: "spring", stiffness: 100 }}
             />
           </div>
         </div>
 
-        <Button
+        {/* Next Button - Shimmer Style */}
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.05 }}
           onClick={onNext}
-          className={`rounded-full shadow-lg ${isCompleted ? 'bg-green-600 hover:bg-green-700' : 'bg-secondary hover:bg-secondary/90'}`}
-          size="icon"
+          disabled={isLast}
+          className="relative rounded-full p-3 bg-gradient-to-r from-[#A2AD1A] to-green-500 text-white shadow-lg shadow-green-500/20 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden"
         >
-          {isLast ? <Check className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-        </Button>
+          {/* Shimmer effect */}
+          <div className="absolute inset-0 overflow-hidden rounded-full">
+            <div className="absolute inset-0 animate-shimmer-slide bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          </div>
+          <ChevronRight className="w-5 h-5 relative z-10" />
+        </motion.button>
       </div>
     </div>
   );

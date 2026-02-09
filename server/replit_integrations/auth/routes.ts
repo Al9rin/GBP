@@ -7,6 +7,18 @@ export function registerAuthRoutes(app: Express): void {
   // Get current authenticated user
   app.get("/api/auth/user", isAuthenticated, async (req: any, res) => {
     try {
+      // In local dev, return a mock user
+      if (process.env.REPL_ID === 'local-dev-placeholder') {
+        return res.json({
+          id: 'local-dev-user',
+          email: 'dev@localhost',
+          firstName: 'Local',
+          lastName: 'Dev',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
+
       const userId = req.user.claims.sub;
       const user = await authStorage.getUser(userId);
       res.json(user);

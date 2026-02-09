@@ -1,10 +1,68 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Home, Mail, List, UserPlus, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
+import { NavBar } from "@/components/ui/tubelight-navbar";
+import { AnimatedBackground } from "@/components/animated/AnimatedBackground";
+import { STEPS } from "@/lib/steps-data";
 
 export default function NotFound() {
+  const navItems = [
+    {
+      name: 'Home',
+      url: '/',
+      icon: Home,
+      action: () => window.location.href = '/'
+    },
+    {
+      name: 'Contact us',
+      url: '#',
+      icon: Mail,
+      action: () => window.location.href = "mailto:editor@goodtherapy.org"
+    },
+    {
+      name: 'Navigate to',
+      url: '#',
+      icon: List,
+      children: STEPS.map(step => ({
+        name: step.title,
+        url: `/guide#step-${step.id}`
+      }))
+    },
+    {
+      name: 'Sign up for Google Business Profile',
+      url: 'https://business.google.com/create',
+      icon: UserPlus,
+      iconRight: ExternalLink,
+      action: () => window.open('https://business.google.com/create', '_blank'),
+      className: "text-[#1a73e8] font-bold hover:text-[#1557b0]"
+    }
+  ];
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-white">
+      {/* Background Animated Effect */}
+      <AnimatedBackground />
+
+      {/* Tubelight Navbar */}
+      <NavBar items={navItems} />
+
+      {/* Header Logo - Top Left */}
+      <header className="absolute top-6 left-6 z-40 pointer-events-none">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <img
+            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+            alt="GoodTherapy"
+            className="h-6 w-auto pointer-events-auto"
+          />
+        </motion.div>
+      </header>
+
+      {/* 404 Content */}
+      <Card className="w-full max-w-md mx-4 relative z-10">
         <CardContent className="pt-6">
           <div className="flex mb-4 gap-2">
             <AlertCircle className="h-8 w-8 text-red-500" />
@@ -12,8 +70,15 @@ export default function NotFound() {
           </div>
 
           <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
+            The page you're looking for doesn't exist.
           </p>
+
+          <a
+            href="/"
+            className="mt-6 inline-block text-sm text-[#1a73e8] hover:text-[#1557b0] font-semibold"
+          >
+            ← Back to Home
+          </a>
         </CardContent>
       </Card>
     </div>
