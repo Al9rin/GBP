@@ -195,15 +195,20 @@ export function GoogleMockup() {
                                     </ShimmerButton>
                                 </motion.div>
 
-                                <ShimmerButton
-                                    onClick={() => { }}
-                                    background="linear-gradient(to right, #1a73e8, #1557b0)"
-                                    shimmerColor="#8ab4f8"
-                                    className="text-lg px-8 py-4 font-semibold shadow-2xl tracking-wide min-w-[200px]"
-                                    borderRadius="100px"
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    Sign Up Now <ArrowRight className="w-5 h-5 ml-2" />
-                                </ShimmerButton>
+                                    <ShimmerButton
+                                        onClick={() => { }}
+                                        background="linear-gradient(to right, #1a73e8, #1557b0)"
+                                        shimmerColor="#8ab4f8"
+                                        className="text-lg px-8 py-4 font-semibold shadow-2xl tracking-wide min-w-[200px]"
+                                        borderRadius="100px"
+                                    >
+                                        Sign Up Now <ArrowRight className="w-5 h-5 ml-2" />
+                                    </ShimmerButton>
+                                </motion.div>
                             </div>
                         </div>
                     </motion.div>

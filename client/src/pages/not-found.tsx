@@ -17,23 +17,25 @@ export default function NotFound() {
       name: 'Contact us',
       url: '#',
       icon: Mail,
-      action: () => window.location.href = "mailto:editor@goodtherapy.org"
+      iconRight: ExternalLink,
+      showEmailPopup: true,
     },
     {
       name: 'Navigate to',
       url: '#',
       icon: List,
-      children: STEPS.map(step => ({
+      children: STEPS.map((step) => ({
         name: step.title,
-        url: `/guide#step-${step.id}`
+        url: `/guide#step-${step.id}`,
+        action: () => window.location.href = `/guide#step-${step.id}`
       }))
     },
     {
       name: 'Sign up for Google Business Profile',
-      url: 'https://business.google.com/create',
+      url: 'https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2',
       icon: UserPlus,
       iconRight: ExternalLink,
-      action: () => window.open('https://business.google.com/create', '_blank'),
+      action: () => window.open('https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2', '_blank'),
       className: "text-[#1a73e8] font-bold hover:text-[#1557b0]"
     }
   ];
@@ -53,11 +55,13 @@ export default function NotFound() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <img
-            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
-            alt="GoodTherapy"
-            className="h-6 w-auto pointer-events-auto"
-          />
+          <a href="https://www.goodtherapy.org" target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+            <img
+              src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+              alt="GoodTherapy"
+              className="h-6 w-auto hover:opacity-80 transition-opacity"
+            />
+          </a>
         </motion.div>
       </header>
 

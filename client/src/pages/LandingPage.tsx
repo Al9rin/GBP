@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-// Button import removed - not used in this component
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { useAuth } from "@/hooks/use-auth";
 import { CheckCircle2, ArrowRight, Home, Mail, List, UserPlus, ExternalLink } from "lucide-react";
 import { ContainerScroll } from "@/components/animated/ContainerScroll";
@@ -15,6 +16,11 @@ export default function LandingPage() {
   const [, navigate] = useLocation();
   const { user, isLoading } = useAuth();
 
+  // Scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navItems = [
     {
       name: 'Home',
@@ -23,26 +29,28 @@ export default function LandingPage() {
       action: () => window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     {
-      name: 'Contact us', // Case sensitive active state might be affected if I change this, but "Contact Us" was used before. User said "Contact Us" in previous prompt. I will keep "Contact Us" or change to "Contact us" if desired. User didn't specify case. I'll stick to 'Contact Us' to match state but wait, I see 'Contact us' in my thought? No, keep 'Contact Us'.
+      name: 'Contact us',
       url: '#',
       icon: Mail,
-      action: () => window.location.href = "mailto:editor@goodtherapy.org"
+      iconRight: ExternalLink,
+      showEmailPopup: true,
     },
     {
       name: 'Navigate to',
       url: '#',
       icon: List,
-      children: STEPS.map(step => ({
+      children: STEPS.map((step) => ({
         name: step.title,
-        url: `/guide#step-${step.id}`
+        url: `/guide#step-${step.id}`,
+        action: () => navigate(`/guide#step-${step.id}`)
       }))
     },
     {
       name: 'Sign up for Google Business Profile',
-      url: 'https://business.google.com/create',
+      url: 'https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2',
       icon: UserPlus,
       iconRight: ExternalLink, // Added right icon
-      action: () => window.open('https://business.google.com/create', '_blank'),
+      action: () => window.open('https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2', '_blank'),
       className: "text-[#1a73e8] font-bold hover:text-[#1557b0]"
     }
   ];
@@ -62,11 +70,13 @@ export default function LandingPage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <img
-            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
-            alt="GoodTherapy"
-            className="h-6 w-auto pointer-events-auto" // Smaller logo (h-8 -> h-6)
-          />
+          <a href="https://www.goodtherapy.org" target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+            <img
+              src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+              alt="GoodTherapy"
+              className="h-6 w-auto hover:opacity-80 transition-opacity"
+            />
+          </a>
         </motion.div>
       </header>
 
@@ -115,7 +125,7 @@ export default function LandingPage() {
                   id: 3,
                   title: "Look consistent and credible",
                   description: "Match your name, phone, and location across Google and GoodTherapy to build trust fast.",
-                  imageSrc: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2670&auto=format&fit=crop",
+                  imageSrc: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2670&auto=format&fit=crop",
                 },
               ]}
               initialIndex={0}
@@ -139,15 +149,14 @@ export default function LandingPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <button
-                className="group relative inline-flex h-14 w-56 items-center justify-center overflow-hidden rounded-full bg-[#A2AD1A] px-8 font-medium text-white transition-all duration-300 hover:bg-[#8e9915] shadow-xl hover:shadow-2xl hover:-translate-y-1"
+              <ShimmerButton
+                className="h-14 px-10 shadow-xl shadow-[#A2AD1A]/20"
+                background="#A2AD1A"
                 onClick={() => navigate("/guide")}
               >
-                <span className="mr-2 text-lg font-semibold">Go to Step One</span>
-                <div className="relative flex h-full items-center">
-                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </div>
-              </button>
+                <span className="mr-2 text-lg font-bold tracking-wide text-white">Go to Step One</span>
+                <ArrowRight className="h-5 w-5 text-white transition-transform duration-300 group-hover:translate-x-1" />
+              </ShimmerButton>
             </motion.div>
           </div>
         </div>

@@ -4,10 +4,11 @@ import {
   ArrowRight, CheckCircle, Sparkles, Search, Globe, TrendingUp,
   ClipboardCheck, LogIn, Building2, Tags, MapPin, Phone, Shield,
   Clock, Calendar, Camera, Send, ArrowRightCircle, Lock, ListChecks,
-  Lightbulb, Info, AlertTriangle, ChevronRight, ExternalLink
+  Lightbulb, Info, AlertTriangle, ChevronRight, ChevronLeft, ExternalLink, Mail
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { EmailPopup } from "@/components/ui/EmailPopup";
 import { GoogleSearchMockup, GoogleMapsMockup } from "@/components/animated/ScreenshotMockups";
 import IntroductionVisual from "@/components/animated/IntroductionVisual";
 import {
@@ -20,6 +21,7 @@ import { cn } from "@/lib/utils";
 interface StepRendererProps {
   stepIndex: number;
   onNext: () => void;
+  onPrev?: () => void;
 }
 
 // Map icons
@@ -29,12 +31,52 @@ const STEP_ICONS = [
   ArrowRightCircle, Lock, ListChecks
 ];
 
-export function StepRenderer({ stepIndex, onNext }: StepRendererProps) {
+export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
   const step = STEPS[stepIndex];
   const isLastStep = stepIndex === STEPS.length - 1;
+  const isFirstStep = stepIndex === 0;
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 py-6">
+    <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 py-6 font-display relative">
+      {/* Floating Navigation Arrows — Desktop Only */}
+      <div className="hidden lg:block">
+        <AnimatePresence>
+          {!isFirstStep && onPrev && (
+            <motion.button
+              key="prev-arrow"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              whileHover={{ scale: 1.15, x: -2 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onPrev}
+              className="fixed left-[calc(18rem+1.5rem)] top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[#A2AD1A]/30 shadow-lg shadow-[#A2AD1A]/10 flex items-center justify-center text-[#A2AD1A] hover:bg-[#A2AD1A] hover:text-white transition-colors duration-200 cursor-pointer"
+              aria-label="Previous step"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {!isLastStep && (
+            <motion.button
+              key="next-arrow"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              whileHover={{ scale: 1.15, x: 2 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onNext}
+              className="fixed right-8 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[#A2AD1A]/30 shadow-lg shadow-[#A2AD1A]/10 flex items-center justify-center text-[#A2AD1A] hover:bg-[#A2AD1A] hover:text-white transition-colors duration-200 cursor-pointer"
+              aria-label="Next step"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
+
       <AnimatePresence mode="wait">
         <motion.div
           key={stepIndex}
@@ -62,7 +104,7 @@ export function StepRenderer({ stepIndex, onNext }: StepRendererProps) {
               <motion.h1
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-4xl lg:text-5xl font-display font-bold text-orange-500 mb-4 leading-tight tracking-tight"
+                className="text-4xl lg:text-5xl font-serif font-semibold italic text-orange-500 mb-4 leading-tight tracking-tight"
               >
                 {step.title}
               </motion.h1>
@@ -72,13 +114,13 @@ export function StepRenderer({ stepIndex, onNext }: StepRendererProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1 }}
-                className="text-lg text-slate-500 font-medium mb-8 leading-relaxed"
+                className="text-lg text-slate-500 font-medium mb-8 leading-relaxed font-display"
               >
                 {step.description}
               </motion.p>
 
               {/* Body Content */}
-              <div className="text-left max-w-none">
+              <div className="text-left max-w-none font-display">
                 <ContentBody content={step.content} stepId={step.id} />
               </div>
             </div>
@@ -111,17 +153,33 @@ export function StepRenderer({ stepIndex, onNext }: StepRendererProps) {
               </div>
 
               {/* Action Button */}
-              <ShimmerButton
-                onClick={onNext}
-                disabled={isLastStep}
-                className="h-14 px-10 shadow-xl shadow-green-500/20 w-full md:w-auto"
-                background="linear-gradient(135deg, #16a34a 0%, #15803d 100%)"
-              >
-                <span className="text-lg font-bold tracking-wide mr-2 text-white">
-                  {isLastStep ? "Complete Guide" : "Next Step"}
-                </span>
-                <ArrowRight className="w-5 h-5 opacity-90 text-white group-hover:translate-x-1 transition-transform" />
-              </ShimmerButton>
+              {isLastStep ? (
+                <div className="relative w-full md:w-auto">
+                  <ShimmerButton
+                    onClick={() => setShowEmailPopup(true)}
+                    className="h-14 px-8 shadow-xl shadow-[#A2AD1A]/20 w-full md:w-auto"
+                    background="#A2AD1A"
+                  >
+                    <Mail className="w-5 h-5 mr-2 text-white" />
+                    <span className="text-base font-bold tracking-wide mr-2 text-white">
+                      Email us your Google Business Profile link
+                    </span>
+                    <ExternalLink className="w-4 h-4 opacity-70 text-white" />
+                  </ShimmerButton>
+                  <EmailPopup open={showEmailPopup} onClose={() => setShowEmailPopup(false)} />
+                </div>
+              ) : (
+                <ShimmerButton
+                  onClick={onNext}
+                  className="h-14 px-10 shadow-xl shadow-[#A2AD1A]/20 w-full md:w-auto"
+                  background="#A2AD1A"
+                >
+                  <span className="text-lg font-bold tracking-wide mr-2 text-white">
+                    Next Step
+                  </span>
+                  <ArrowRight className="w-5 h-5 opacity-90 text-white group-hover:translate-x-1 transition-transform" />
+                </ShimmerButton>
+              )}
             </motion.div>
 
           </div>
@@ -174,7 +232,7 @@ function StepTwoVisual() {
 
   return (
     <div className="w-full relative max-w-3xl mx-auto">
-      <div className="w-full aspect-[4/3] bg-white rounded-2xl shadow-2xl overflow-hidden border-[6px] border-slate-900/5 ring-1 ring-slate-900/5 relative">
+      <div className="w-full aspect-[4/3] bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 relative">
         <div className="h-9 bg-slate-50 border-b flex items-center px-4 gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-400/80" />
@@ -190,26 +248,26 @@ function StepTwoVisual() {
             {mode === 'search' ? (
               <motion.div
                 key="search"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.02 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0"
               >
-                <div className="w-[125%] h-[125%] origin-top-left transform scale-[0.80]">
+                <div className="w-full h-full">
                   <GoogleSearchMockup />
                 </div>
               </motion.div>
             ) : (
               <motion.div
                 key="maps"
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.02 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0"
               >
-                <div className="w-[125%] h-[125%] origin-top-left transform scale-[0.80]">
+                <div className="w-full h-full">
                   <GoogleMapsMockup highlightPin={true} />
                 </div>
               </motion.div>
@@ -242,12 +300,45 @@ function StepTwoVisual() {
 function ContentBody({ content, stepId }: any) {
   const processText = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(<strong>.*?<\/strong>)/g);
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<kw>.*?<\/kw>)/g);
     return parts.map((part: string, i: number) => {
       if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
         return (
-          <span key={i} className="font-extrabold text-slate-900 bg-amber-50 px-2 py-0.5 rounded-md mx-0.5 border border-amber-200 tracking-wide">
+          <span key={i} className="font-extrabold text-[#A2AD1A] tracking-wide">
             {part.replace(/<\/?strong>/g, '')}
+          </span>
+        );
+      }
+      if (part.startsWith('<a-gt>') && part.endsWith('</a-gt>')) {
+        return (
+          <a
+            key={i}
+            href="https://www.goodtherapy.org/login.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-[#A2AD1A] hover:text-[#8e9915] underline decoration-[#A2AD1A]/30 hover:decoration-[#A2AD1A] transition-colors"
+          >
+            {part.replace(/<\/?a-gt>/g, '')}
+          </a>
+        );
+      }
+      if (part.startsWith('<a-gbp>') && part.endsWith('</a-gbp>')) {
+        return (
+          <a
+            key={i}
+            href="https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors"
+          >
+            {part.replace(/<\/?a-gbp>/g, '')}
+          </a>
+        );
+      }
+      if (part.startsWith('<kw>') && part.endsWith('</kw>')) {
+        return (
+          <span key={i} className="font-bold text-[#A2AD1A]">
+            {part.replace(/<\/?kw>/g, '')}
           </span>
         );
       }
@@ -262,7 +353,7 @@ function ContentBody({ content, stepId }: any) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-[15px] text-slate-700 leading-[1.8]"
+          className="text-[15px] text-slate-700 leading-[1.8] font-display"
         >
           {processText(content.intro)}
         </motion.p>
@@ -292,7 +383,7 @@ function ContentBody({ content, stepId }: any) {
               className="p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-100 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                feature.icon === 'search' ? "bg-blue-100 text-blue-600" : "bg-green-100 text-green-600"
+                feature.icon === 'search' ? "bg-blue-100 text-blue-600" : "bg-[#A2AD1A]/10 text-[#A2AD1A]"
               )}>
                 {feature.icon === 'search' ? <Search size={20} /> : <MapPin size={20} />}
               </div>
@@ -312,7 +403,7 @@ function ContentBody({ content, stepId }: any) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.05 }}
-          className="text-[15px] text-slate-700 leading-[1.8]"
+          className="text-[15px] text-slate-700 leading-[1.8] font-display"
         >
           {processText(p)}
         </motion.p>
@@ -350,40 +441,125 @@ function ContentBody({ content, stepId }: any) {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-md">
                 {i + 1}
               </div>
-              <p className="text-[15px] text-slate-700 leading-[1.8] font-medium">{processText(stepText)}</p>
+              <p className="text-[15px] text-slate-700 leading-[1.8] font-display font-medium">{processText(stepText)}</p>
             </motion.div>
           ))}
         </div>
       )}
 
-      {/* Flow Steps (Step 3 & 15) */}
-      {content.flowSteps && (
-        <div className="my-6">
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
-            {content.flowSteps.map((flowStep: string, i: number) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1 }}
-                className="flex items-center gap-2 md:gap-3"
-              >
-                <div className={cn(
-                  "px-4 py-2 rounded-full text-sm font-semibold shadow-sm border",
-                  i === 0 ? "bg-blue-50 text-blue-700 border-blue-200" :
-                  i === content.flowSteps.length - 1 ? "bg-green-50 text-green-700 border-green-200" :
-                  "bg-orange-50 text-orange-700 border-orange-200"
-                )}>
-                  {flowStep}
-                </div>
-                {i < content.flowSteps.length - 1 && (
-                  <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
-                )}
-              </motion.div>
-            ))}
+      {/* Flow Steps (Step 3 only — Step 15 uses Step15Visual instead) */}
+      {content.flowSteps && stepId !== 15 && (() => {
+        // Icon mapping for flow steps
+        const flowIcons: Record<string, React.ElementType> = {
+          'google': Search,
+          'listing': Building2,
+          'goodtherapy': Globe,
+          'contact': Phone,
+          'search': Search,
+          'profile': Globe,
+          'review': Globe,
+          'click': ExternalLink,
+        };
+
+        const getFlowIcon = (text: string): React.ElementType => {
+          const lower = text.toLowerCase();
+          if (lower.includes('google search') || lower.includes('searches') || lower.includes('search')) return Search;
+          if (lower.includes('google listing') || lower.includes('listing appears') || lower.includes('your google')) return Building2;
+          if (lower.includes('goodtherapy') || lower.includes('profile') || lower.includes('review')) return Globe;
+          if (lower.includes('contact') || lower.includes('request')) return Phone;
+          if (lower.includes('click')) return ExternalLink;
+          return ArrowRight;
+        };
+
+        const getFlowColor = (i: number, total: number) => {
+          if (i === 0) return { bg: 'bg-blue-50', text: 'text-[#1a73e8]', border: 'border-blue-200', iconBg: 'bg-blue-100', dot: 'bg-[#1a73e8]' };
+          if (i === total - 1) return { bg: 'bg-green-50', text: 'text-[#A2AD1A]', border: 'border-green-200', iconBg: 'bg-green-100', dot: 'bg-[#A2AD1A]' };
+          return { bg: 'bg-orange-50', text: 'text-[#E06D00]', border: 'border-orange-200', iconBg: 'bg-orange-100', dot: 'bg-[#E06D00]' };
+        };
+
+        return (
+          <div className="my-8">
+            {/* Desktop: Horizontal flow */}
+            <div className="hidden md:block">
+              <div className="relative flex items-stretch justify-center gap-0">
+                {content.flowSteps.map((flowStep: string, i: number) => {
+                  const Icon = getFlowIcon(flowStep);
+                  const colors = getFlowColor(i, content.flowSteps.length);
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.12, duration: 0.4, ease: "easeOut" }}
+                      className="flex items-center"
+                    >
+                      <div className={cn(
+                        "flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border shadow-sm min-w-[140px] max-w-[170px]",
+                        colors.bg, colors.border
+                      )}>
+                        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", colors.iconBg)}>
+                          <Icon size={20} className={colors.text} />
+                        </div>
+                        <span className={cn("text-xs font-bold text-center leading-tight", colors.text)}>
+                          {processText(flowStep)}
+                        </span>
+                        <div className={cn("w-1.5 h-1.5 rounded-full", colors.dot)} />
+                      </div>
+                      {i < content.flowSteps.length - 1 && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.12 + 0.15 }}
+                          className="mx-1.5 flex items-center"
+                        >
+                          <div className="w-6 h-[2px] bg-slate-200 rounded-full" />
+                          <ChevronRight className="w-4 h-4 text-slate-300 -ml-1" />
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Mobile: Vertical flow */}
+            <div className="block md:hidden">
+              <div className="flex flex-col items-center gap-0">
+                {content.flowSteps.map((flowStep: string, i: number) => {
+                  const Icon = getFlowIcon(flowStep);
+                  const colors = getFlowColor(i, content.flowSteps.length);
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="flex flex-col items-center"
+                    >
+                      <div className={cn(
+                        "flex items-center gap-3 px-5 py-3.5 rounded-xl border shadow-sm w-full max-w-[300px]",
+                        colors.bg, colors.border
+                      )}>
+                        <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center shrink-0", colors.iconBg)}>
+                          <Icon size={18} className={colors.text} />
+                        </div>
+                        <span className={cn("text-sm font-bold leading-tight", colors.text)}>
+                          {processText(flowStep)}
+                        </span>
+                      </div>
+                      {i < content.flowSteps.length - 1 && (
+                        <div className="h-5 flex items-center justify-center">
+                          <div className="w-[2px] h-full bg-slate-200 rounded-full" />
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Options / Choices (Step 8) */}
       {content.options && (
@@ -407,7 +583,7 @@ function ContentBody({ content, stepId }: any) {
               <div className="flex items-start gap-3">
                 <div className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5",
-                  idx === 0 ? "bg-blue-600 text-white" : "bg-green-600 text-white"
+                  idx === 0 ? "bg-blue-600 text-white" : "bg-[#A2AD1A] text-white"
                 )}>
                   {idx === 0 ? <Building2 size={16} /> : <MapPin size={16} />}
                 </div>
@@ -469,7 +645,7 @@ function ContentBody({ content, stepId }: any) {
                 ))}
                 {/* Section paragraphs */}
                 {section.paragraphs?.map((p: string, pi: number) => (
-                  <p key={pi} className="text-[15px] text-slate-600 leading-[1.8]">{processText(p)}</p>
+                  <p key={pi} className="text-[15px] text-slate-600 leading-[1.8] font-display">{processText(p)}</p>
                 ))}
                 {/* Section steps */}
                 {section.steps?.map((stepText: string, si: number) => (
@@ -477,7 +653,7 @@ function ContentBody({ content, stepId }: any) {
                     <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                       {si + 1}
                     </div>
-                    <p className="text-[15px] text-slate-700 leading-[1.8]">{processText(stepText)}</p>
+                    <p className="text-[15px] text-slate-700 leading-[1.8] font-display">{processText(stepText)}</p>
                   </div>
                 ))}
               </div>
@@ -488,7 +664,7 @@ function ContentBody({ content, stepId }: any) {
                     <div className="absolute -top-2 left-4 bg-amber-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
                       Example
                     </div>
-                    <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{section.example}</p>
+                    <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{processText(section.example)}</p>
                   </div>
                 </div>
               )}
@@ -595,7 +771,7 @@ function ContentBody({ content, stepId }: any) {
       {content.whatHappensNext && (
         <div className="mt-8 space-y-6">
           <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <div className="w-1 h-6 bg-green-500 rounded-full" />
+            <div className="w-1 h-6 bg-[#A2AD1A] rounded-full" />
             {content.whatHappensNext.heading}
           </h3>
           <div className="grid md:grid-cols-2 gap-4">
@@ -614,7 +790,7 @@ function ContentBody({ content, stepId }: any) {
               >
                 <h4 className={cn(
                   "font-bold text-sm mb-3",
-                  idx === 0 ? "text-orange-700" : "text-green-700"
+                  idx === 0 ? "text-orange-700" : "text-[#A2AD1A]"
                 )}>
                   {section.title}
                 </h4>
@@ -623,7 +799,7 @@ function ContentBody({ content, stepId }: any) {
                     <div key={si} className="flex items-start gap-2">
                       <div className={cn(
                         "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5",
-                        idx === 0 ? "bg-orange-500" : "bg-green-600"
+                        idx === 0 ? "bg-orange-500" : "bg-[#A2AD1A]"
                       )}>
                         {si + 1}
                       </div>
@@ -655,11 +831,35 @@ function ContentBody({ content, stepId }: any) {
 /*                          Interactive Checklist                               */
 /* -------------------------------------------------------------------------- */
 
+// Step 4 checklist icon map — keyed by item index
+const STEP4_ICONS: React.ElementType[] = [Building2, MapPin, Phone, Search, Globe];
+
 function InteractiveChecklist({ content, stepId }: any) {
   const [checkedItems, setCheckedItems] = useState<boolean[]>(new Array(content.items?.length || 0).fill(false));
   const toggleItem = (idx: number) => setCheckedItems(prev => { const n = [...prev]; n[idx] = !n[idx]; return n; });
+
+  const processChecklistText = (text: string) => {
+    if (!text) return null;
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<kw>.*?<\/kw>)/g);
+    return parts.map((part: string, i: number) => {
+      if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
+        return <span key={i} className="font-extrabold text-[#A2AD1A] tracking-wide">{part.replace(/<\/?strong>/g, '')}</span>;
+      }
+      if (part.startsWith('<a-gt>') && part.endsWith('</a-gt>')) {
+        return <a key={i} href="https://www.goodtherapy.org/login.html" target="_blank" rel="noopener noreferrer" className="font-bold text-[#A2AD1A] hover:text-[#8e9915] underline decoration-[#A2AD1A]/30 hover:decoration-[#A2AD1A] transition-colors" onClick={(e) => e.stopPropagation()}>{part.replace(/<\/?a-gt>/g, '')}</a>;
+      }
+      if (part.startsWith('<a-gbp>') && part.endsWith('</a-gbp>')) {
+        return <a key={i} href="https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2" target="_blank" rel="noopener noreferrer" className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors" onClick={(e) => e.stopPropagation()}>{part.replace(/<\/?a-gbp>/g, '')}</a>;
+      }
+      if (part.startsWith('<kw>') && part.endsWith('</kw>')) {
+        return <span key={i} className="font-bold text-[#A2AD1A]">{part.replace(/<\/?kw>/g, '')}</span>;
+      }
+      return part;
+    });
+  };
   const checkedCount = checkedItems.filter(Boolean).length;
   const total = checkedItems.length;
+  const hasIcons = stepId === 4;
 
   return (
     <div className="rounded-2xl bg-slate-50/80 p-6 border border-slate-100 space-y-4 my-6">
@@ -676,7 +876,7 @@ function InteractiveChecklist({ content, stepId }: any) {
       {/* Progress bar */}
       <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-green-500 rounded-full"
+          className="h-full bg-[#A2AD1A] rounded-full"
           animate={{ width: `${(checkedCount / total) * 100}%` }}
           transition={{ duration: 0.3 }}
         />
@@ -684,34 +884,63 @@ function InteractiveChecklist({ content, stepId }: any) {
 
       {/* Items */}
       <div className="space-y-2.5 mt-4">
-        {content.items?.map((item: string, idx: number) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: idx * 0.04 }}
-            onClick={() => toggleItem(idx)}
-            className={cn(
-              "flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all bg-white hover:bg-slate-50",
-              checkedItems[idx]
-                ? "border-green-200 shadow-sm shadow-green-100/50"
-                : "border-slate-200"
-            )}
-          >
-            <div className={cn(
-              "w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors",
-              checkedItems[idx] ? "bg-green-500 text-white" : "bg-slate-200 text-slate-400"
-            )}>
-              <CheckCircle size={16} />
-            </div>
-            <span className={cn(
-              "text-sm leading-relaxed transition-colors",
-              checkedItems[idx] ? "text-green-800 line-through opacity-60" : "text-slate-700"
-            )}>
-              {item}
-            </span>
-          </motion.div>
-        ))}
+        {content.items?.map((item: string, idx: number) => {
+          const IconComponent = hasIcons && idx < STEP4_ICONS.length ? STEP4_ICONS[idx] : null;
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.04 }}
+              onClick={() => toggleItem(idx)}
+              className={cn(
+                "flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all bg-white hover:bg-slate-50",
+                checkedItems[idx]
+                  ? "border-green-200 shadow-sm shadow-green-100/50"
+                  : "border-slate-200"
+              )}
+            >
+              {/* Checkbox circle */}
+              <div className={cn(
+                "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors",
+                checkedItems[idx] ? "bg-[#A2AD1A] text-white" : "bg-slate-200 text-slate-400"
+              )}>
+                <CheckCircle size={16} />
+              </div>
+
+              {/* Icon (Step 4 only) */}
+              {IconComponent && (
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: idx * 0.06, type: "spring", stiffness: 300 }}
+                  className={cn(
+                    "w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors",
+                    checkedItems[idx]
+                      ? "bg-[#A2AD1A]/10"
+                      : "bg-orange-50"
+                  )}
+                >
+                  <IconComponent
+                    size={18}
+                    className={cn(
+                      "transition-colors",
+                      checkedItems[idx] ? "text-[#A2AD1A]" : "text-[#E06D00]"
+                    )}
+                  />
+                </motion.div>
+              )}
+
+              {/* Text */}
+              <span className={cn(
+                "text-sm leading-relaxed transition-colors flex-1",
+                checkedItems[idx] ? "text-green-800 line-through opacity-60" : "text-slate-700"
+              )}>
+                {processChecklistText(item)}
+              </span>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );

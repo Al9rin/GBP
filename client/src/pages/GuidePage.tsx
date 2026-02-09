@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { StepRenderer } from "@/components/steps/StepRenderer";
@@ -7,9 +7,39 @@ import { STEPS } from "@/lib/steps-data";
 import { Home, Mail, List, UserPlus, ExternalLink } from "lucide-react";
 import { NavBar } from "@/components/ui/tubelight-navbar";
 import { AnimatedBackground } from "@/components/animated/AnimatedBackground";
+import { ScrollDownIndicator } from "@/components/ui/ScrollDownIndicator";
 
 export default function GuidePage() {
   const [currentStep, setCurrentStep] = useState(0);
+  const mainRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => {
+      if (mainRef.current) {
+        mainRef.current.scrollTop = 0;
+      }
+    });
+  }, []);
+
+  // Read URL hash on mount to support deep linking from other pages
+  useEffect(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/^#step-(\d+)$/);
+    if (match) {
+      const stepId = parseInt(match[1], 10);
+      const index = STEPS.findIndex(s => s.id === stepId);
+      if (index >= 0) setCurrentStep(index);
+    }
+  }, []);
+
+  // Scroll to top whenever step changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentStep]);
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) {
@@ -34,23 +64,25 @@ export default function GuidePage() {
       name: 'Contact us',
       url: '#',
       icon: Mail,
-      action: () => window.location.href = "mailto:editor@goodtherapy.org"
+      iconRight: ExternalLink,
+      showEmailPopup: true,
     },
     {
       name: 'Navigate to',
       url: '#',
       icon: List,
-      children: STEPS.map(step => ({
+      children: STEPS.map((step, index) => ({
         name: step.title,
-        url: `/guide#step-${step.id}`
+        url: `/guide#step-${step.id}`,
+        action: () => setCurrentStep(index)
       }))
     },
     {
       name: 'Sign up for Google Business Profile',
-      url: 'https://business.google.com/create',
+      url: 'https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2',
       icon: UserPlus,
       iconRight: ExternalLink,
-      action: () => window.open('https://business.google.com/create', '_blank'),
+      action: () => window.open('https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2', '_blank'),
       className: "text-[#1a73e8] font-bold hover:text-[#1557b0]"
     }
   ];
@@ -70,11 +102,13 @@ export default function GuidePage() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <img
-            src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
-            alt="GoodTherapy"
-            className="h-6 w-auto pointer-events-auto"
-          />
+          <a href="https://www.goodtherapy.org" target="_blank" rel="noopener noreferrer" className="pointer-events-auto">
+            <img
+              src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/11/GoodTherapy-Logo.png"
+              alt="GoodTherapy"
+              className="h-6 w-auto hover:opacity-80 transition-opacity"
+            />
+          </a>
         </motion.div>
       </header>
 
@@ -88,16 +122,20 @@ export default function GuidePage() {
           className="hidden lg:flex"
         />
 
-        {/* Main Content Area - No white background, just AnimatedBackground shows through */}
-        <main className="flex-1 overflow-y-auto relative custom-scrollbar">
+        {/* Main Content Area */}
+        <main ref={mainRef} className="flex-1 overflow-y-auto relative custom-scrollbar">
           <div className="w-full h-full p-4 lg:p-8">
             <StepRenderer
               stepIndex={currentStep}
               onNext={handleNext}
+              onPrev={handlePrev}
             />
           </div>
         </main>
       </div>
+
+      {/* Scroll down indicator - fixed positioned, outside main to avoid overflow clipping */}
+      <ScrollDownIndicator key={currentStep} scrollRef={mainRef} />
 
       <MobileControls
         currentStep={currentStep}

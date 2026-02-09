@@ -31,6 +31,7 @@ import {
   Star,
   AlertTriangle,
   ExternalLink,
+  Share2,
 } from 'lucide-react';
 import { DeviceFrame } from '@/components/animated/DeviceFrame';
 import IntroductionVisual from '@/components/animated/IntroductionVisual';
@@ -76,276 +77,17 @@ export function Step1Visual() {
 }
 
 // ==============================================================================
-// STEP 3: Referral Flow — Animated SVG path with traveling dot
+// STEP 3: Referral Flow — Removed (flow is rendered in ContentBody)
 // ==============================================================================
 export function Step3Visual() {
-  const [activeNode, setActiveNode] = useState(0);
-  const [pathProgress, setPathProgress] = useState(0);
-
-  useEffect(() => {
-    let frame: number;
-    let start: number;
-    const duration = 6000;
-
-    const animate = (timestamp: number) => {
-      if (!start) start = timestamp;
-      const elapsed = (timestamp - start) % duration;
-      const progress = elapsed / duration;
-      setPathProgress(progress);
-      setActiveNode(Math.min(3, Math.floor(progress * 4)));
-      frame = requestAnimationFrame(animate);
-    };
-
-    frame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
-  const nodes = [
-    { label: 'Google Search', sublabel: 'or Maps', icon: Search, color: COLORS.blue },
-    { label: 'Your GBP', sublabel: 'Listing', icon: Building2, color: COLORS.orange },
-    { label: 'GoodTherapy', sublabel: 'Profile', icon: Globe, color: COLORS.green },
-    { label: 'Client', sublabel: 'Contacts You', icon: Phone, color: COLORS.green },
-  ];
-
-  return (
-    <div className="w-full max-w-4xl mx-auto py-8 px-4">
-      <div className="relative bg-white rounded-2xl p-8 lg:p-10 border border-slate-200 shadow-lg overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-orange-50/20 to-green-50/30 pointer-events-none" />
-
-        {/* Desktop: Horizontal flow */}
-        <div className="relative flex items-center justify-between gap-2">
-          {/* SVG connecting path */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={COLORS.blue} />
-                <stop offset="50%" stopColor={COLORS.orange} />
-                <stop offset="100%" stopColor={COLORS.green} />
-              </linearGradient>
-            </defs>
-            {/* Background path */}
-            <line x1="15%" y1="50%" x2="85%" y2="50%" stroke="#e5e7eb" strokeWidth="3" strokeDasharray="8,4" />
-            {/* Animated progress path */}
-            <line
-              x1="15%"
-              y1="50%"
-              x2={`${15 + pathProgress * 70}%`}
-              y2="50%"
-              stroke="url(#pathGradient)"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            {/* Traveling dot */}
-            <circle
-              cx={`${15 + pathProgress * 70}%`}
-              cy="50%"
-              r="6"
-              fill={pathProgress < 0.33 ? COLORS.blue : pathProgress < 0.66 ? COLORS.orange : COLORS.green}
-              style={{ filter: 'drop-shadow(0 0 6px rgba(0,0,0,0.2))' }}
-            />
-          </svg>
-
-          {/* Nodes */}
-          {nodes.map((node, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{
-                opacity: 1,
-                scale: activeNode >= idx ? 1.05 : 1,
-                y: 0,
-              }}
-              transition={{ delay: idx * 0.15, duration: 0.5, type: 'spring' }}
-              className="relative z-10 flex flex-col items-center gap-3 flex-1"
-            >
-              {/* Icon circle */}
-              <motion.div
-                animate={{
-                  boxShadow: activeNode === idx ? `0 0 20px ${node.color}40` : '0 4px 12px rgba(0,0,0,0.1)',
-                  scale: activeNode === idx ? 1.1 : 1,
-                }}
-                transition={{ duration: 0.4 }}
-                className="w-16 h-16 lg:w-20 lg:h-20 rounded-full flex items-center justify-center shadow-lg border-4 border-white"
-                style={{ backgroundColor: activeNode >= idx ? `${node.color}18` : '#f8fafc' }}
-              >
-                <node.icon
-                  size={28}
-                  style={{ color: activeNode >= idx ? node.color : '#94a3b8' }}
-                  strokeWidth={1.5}
-                />
-              </motion.div>
-
-              {/* Label */}
-              <div className="text-center">
-                <p className="text-sm font-bold" style={{ color: activeNode >= idx ? node.color : '#94a3b8' }}>
-                  {node.label}
-                </p>
-                <p className="text-xs text-slate-400">{node.sublabel}</p>
-              </div>
-
-              {/* Active indicator */}
-              {activeNode === idx && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -bottom-2 w-2 h-2 rounded-full"
-                  style={{ backgroundColor: node.color }}
-                />
-              )}
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
 
 // ==============================================================================
-// STEP 4: Gather Details — Clipboard checklist with animated cursor
+// STEP 4: Gather Details — Removed (checklist is rendered in ContentBody)
 // ==============================================================================
 export function Step4Visual() {
-  const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
-  const [cursorIdx, setCursorIdx] = useState(-1);
-
-  const items = [
-    { icon: Building2, label: 'Practice Name', sublabel: 'Exact version you want public' },
-    { icon: MapPin, label: 'Address / Service Area', sublabel: 'Where clients can find you' },
-    { icon: Phone, label: 'Phone Number', sublabel: 'For new inquiries' },
-    { icon: Mail, label: 'Google Account', sublabel: 'Gmail or Workspace' },
-    { icon: Globe, label: 'GoodTherapy Link', sublabel: 'Your profile URL' },
-  ];
-
-  useEffect(() => {
-    let idx = 0;
-    const checkNext = () => {
-      if (idx < items.length) {
-        setCursorIdx(idx);
-        setTimeout(() => {
-          setCheckedItems(prev => {
-            const next = [...prev];
-            next[idx] = true;
-            return next;
-          });
-          idx++;
-          setTimeout(checkNext, 600);
-        }, 800);
-      }
-    };
-    setTimeout(checkNext, 800);
-  }, []);
-
-  const checkedCount = checkedItems.filter(Boolean).length;
-  const progress = (checkedCount / items.length) * 100;
-
-  return (
-    <div className="w-full max-w-2xl mx-auto py-8 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 relative overflow-hidden"
-      >
-        {/* Header with clipboard icon and progress */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-              <Clipboard size={24} style={{ color: COLORS.orange }} />
-            </div>
-            <div>
-              <h3 className="font-bold text-slate-900">Setup Checklist</h3>
-              <p className="text-xs text-slate-500">{checkedCount} of {items.length} ready</p>
-            </div>
-          </div>
-
-          {/* Progress ring */}
-          <div className="relative w-12 h-12">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 48 48">
-              <circle cx="24" cy="24" r="20" fill="none" stroke="#e5e7eb" strokeWidth="4" />
-              <motion.circle
-                cx="24" cy="24" r="20" fill="none"
-                stroke={COLORS.green}
-                strokeWidth="4"
-                strokeDasharray={`${2 * Math.PI * 20}`}
-                animate={{ strokeDashoffset: 2 * Math.PI * 20 * (1 - progress / 100) }}
-                strokeLinecap="round"
-                transition={{ duration: 0.4 }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center text-xs font-bold" style={{ color: COLORS.green }}>
-              {Math.round(progress)}%
-            </div>
-          </div>
-        </div>
-
-        {/* Items list */}
-        <div className="space-y-3">
-          {items.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
-                checkedItems[idx]
-                  ? 'bg-green-50/50 border-green-200'
-                  : cursorIdx === idx
-                    ? 'bg-blue-50/50 border-blue-200 shadow-sm'
-                    : 'bg-slate-50 border-slate-100'
-              }`}
-            >
-              {/* Checkbox */}
-              <motion.div
-                animate={{
-                  scale: checkedItems[idx] ? 1 : cursorIdx === idx ? 1.1 : 1,
-                  backgroundColor: checkedItems[idx] ? COLORS.green : '#e2e8f0',
-                }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-              >
-                {checkedItems[idx] && (
-                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
-                    <Check size={16} className="text-white" strokeWidth={3} />
-                  </motion.div>
-                )}
-              </motion.div>
-
-              {/* Icon */}
-              <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                style={{ backgroundColor: checkedItems[idx] ? `${COLORS.green}15` : COLORS.lightOrange }}
-              >
-                <item.icon size={20} style={{ color: checkedItems[idx] ? COLORS.green : COLORS.orange }} />
-              </div>
-
-              {/* Label */}
-              <div className="flex-1 min-w-0">
-                <p className={`text-sm font-semibold ${checkedItems[idx] ? 'text-green-800' : 'text-slate-700'}`}>
-                  {item.label}
-                </p>
-                <p className="text-xs text-slate-400">{item.sublabel}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* All done message */}
-        <AnimatePresence>
-          {checkedCount === items.length && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-6 p-4 rounded-xl bg-green-50 border border-green-200 flex items-center gap-3"
-            >
-              <Sparkles size={20} style={{ color: COLORS.green }} />
-              <p className="text-sm font-semibold" style={{ color: COLORS.green }}>
-                You're ready to start setting up your profile!
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </div>
-  );
+  return null;
 }
 
 // ==============================================================================
@@ -1780,7 +1522,7 @@ export function Step14Visual() {
 }
 
 // ==============================================================================
-// STEP 15: Discovery to Contact — Client journey timeline
+// STEP 15: Discovery to Contact — Enhanced client journey timeline
 // ==============================================================================
 export function Step15Visual() {
   const [activeStep, setActiveStep] = useState(0);
@@ -1797,23 +1539,23 @@ export function Step15Visual() {
         setActiveStep(step);
         setLineHeight(step * 25);
       }
-    }, 1500);
+    }, 1800);
     return () => clearInterval(timer);
   }, []);
 
   const steps = [
-    { icon: Search, label: 'Client searches Google', desc: '"therapist near me" or your name', color: COLORS.blue },
-    { icon: MapPin, label: 'Your listing appears', desc: 'In search results or on Maps', color: COLORS.blue },
-    { icon: ExternalLink, label: 'Clicks your GoodTherapy link', desc: 'The website link on your profile', color: COLORS.orange },
-    { icon: Globe, label: 'Reviews your full profile', desc: 'Credentials, approach, and details', color: COLORS.orange },
-    { icon: Phone, label: 'Contacts you', desc: 'Through your preferred method', color: COLORS.green },
+    { icon: Search, label: 'Client searches Google', desc: '"therapist near me" or your name', color: COLORS.blue, gradient: 'from-[#1a73e8] to-[#4285F4]' },
+    { icon: MapPin, label: 'Your listing appears', desc: 'In search results or on Maps', color: COLORS.blue, gradient: 'from-[#1a73e8] to-[#4285F4]' },
+    { icon: ExternalLink, label: 'Clicks your GoodTherapy link', desc: 'The website link on your profile', color: COLORS.orange, gradient: 'from-[#E06D00] to-[#FF8C38]' },
+    { icon: Globe, label: 'Reviews your full profile', desc: 'Credentials, approach, and details', color: COLORS.orange, gradient: 'from-[#E06D00] to-[#FF8C38]' },
+    { icon: Phone, label: 'Contacts you', desc: 'Through your preferred method', color: COLORS.green, gradient: 'from-[#A2AD1A] to-[#c4d030]' },
   ];
 
   return (
     <div className="w-full max-w-3xl mx-auto py-8 px-4">
-      <div className="relative space-y-2">
+      <div className="relative space-y-1">
         {/* Animated progress line */}
-        <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-slate-200 rounded-full">
+        <div className="absolute left-[2.25rem] top-10 bottom-10 w-1 bg-slate-100 rounded-full overflow-hidden">
           <motion.div
             animate={{ height: `${lineHeight}%` }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -1831,46 +1573,83 @@ export function Step15Visual() {
           return (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="relative flex gap-5 items-start py-3"
+              initial={{ opacity: 0, x: -20, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ delay: idx * 0.15, duration: 0.5, type: 'spring', stiffness: 200 }}
+              className="relative flex gap-5 items-center py-3"
             >
-              {/* Step circle */}
-              <motion.div
-                animate={{
-                  scale: isCurrent ? 1.15 : 1,
-                  boxShadow: isCurrent ? `0 0 20px ${stepItem.color}40` : '0 2px 8px rgba(0,0,0,0.08)',
-                  backgroundColor: isActive || isCurrent ? stepItem.color : '#f1f5f9',
-                }}
-                transition={{ duration: 0.3 }}
-                className="relative z-10 w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
-              >
-                <stepItem.icon size={24} className={isActive || isCurrent ? 'text-white' : 'text-slate-400'} />
-              </motion.div>
+              {/* Step circle with number badge */}
+              <div className="relative shrink-0">
+                <motion.div
+                  animate={{
+                    scale: isCurrent ? 1.12 : 1,
+                    boxShadow: isCurrent
+                      ? `0 0 24px ${stepItem.color}50, 0 4px 16px ${stepItem.color}30`
+                      : isActive
+                        ? `0 4px 12px ${stepItem.color}20`
+                        : '0 2px 8px rgba(0,0,0,0.06)',
+                  }}
+                  transition={{ duration: 0.4, type: 'spring', stiffness: 300 }}
+                  className={`relative z-10 w-[4.5rem] h-[4.5rem] rounded-2xl flex items-center justify-center ${
+                    isActive || isCurrent ? `bg-gradient-to-br ${stepItem.gradient}` : 'bg-slate-50 border border-slate-200'
+                  }`}
+                >
+                  <stepItem.icon size={26} className={isActive || isCurrent ? 'text-white' : 'text-slate-400'} strokeWidth={1.8} />
 
-              {/* Content */}
+                  {/* Pulse ring for current step */}
+                  {isCurrent && (
+                    <motion.div
+                      className="absolute inset-0 rounded-2xl"
+                      animate={{
+                        boxShadow: [
+                          `0 0 0 0px ${stepItem.color}40`,
+                          `0 0 0 10px ${stepItem.color}00`,
+                        ],
+                      }}
+                      transition={{ repeat: Infinity, duration: 1.5, ease: 'easeOut' }}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Number badge */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: idx * 0.15 + 0.2, type: 'spring', stiffness: 400 }}
+                  className="absolute -top-1.5 -right-1.5 z-20 w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center border border-slate-100"
+                >
+                  <span className="text-[10px] font-extrabold" style={{ color: stepItem.color }}>{idx + 1}</span>
+                </motion.div>
+              </div>
+
+              {/* Content card */}
               <motion.div
                 animate={{
                   opacity: isActive || isCurrent ? 1 : 0.5,
                 }}
-                className="pt-1 flex-1"
+                transition={{ duration: 0.3 }}
+                className={`flex-1 p-4 rounded-xl transition-all ${
+                  isCurrent
+                    ? 'bg-white shadow-md border border-slate-200'
+                    : isActive
+                      ? 'bg-white/60'
+                      : ''
+                }`}
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-400">{idx + 1}</span>
-                  <p className="font-bold text-base text-slate-900">{stepItem.label}</p>
-                </div>
+                <p className={`font-bold text-[15px] ${isCurrent ? 'text-slate-900' : 'text-slate-700'}`}>
+                  {stepItem.label}
+                </p>
                 <p className="text-sm text-slate-500 mt-0.5">{stepItem.desc}</p>
               </motion.div>
 
-              {/* Arrow */}
+              {/* Arrow indicator */}
               {isCurrent && (
                 <motion.div
                   initial={{ opacity: 0, x: -5 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="self-center"
                 >
-                  <ArrowRight size={16} style={{ color: stepItem.color }} />
+                  <ArrowRight size={18} style={{ color: stepItem.color }} />
                 </motion.div>
               )}
             </motion.div>
@@ -1997,7 +1776,7 @@ export function Step16Visual() {
 }
 
 // ==============================================================================
-// STEP 17: Final Checklist — Celebration with gradient progress
+// STEP 17: Final Checklist — Enhanced celebration with gradient progress
 // ==============================================================================
 export function Step17Visual() {
   const [progress, setProgress] = useState(0);
@@ -2026,51 +1805,83 @@ export function Step17Visual() {
         className="relative bg-white rounded-3xl p-12 shadow-2xl border border-slate-200 flex flex-col items-center overflow-hidden"
       >
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-white to-orange-50/30 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50/60 via-white to-orange-50/40 pointer-events-none" />
 
-        {/* Confetti particles */}
+        {/* Confetti particles — wave 1 */}
         {showCheckmark &&
-          [...Array(30)].map((_, i) => (
+          [...Array(40)].map((_, i) => (
             <motion.div
-              key={i}
+              key={`c1-${i}`}
               initial={{ opacity: 1, x: 0, y: 0 }}
               animate={{
                 opacity: 0,
-                x: (Math.random() - 0.5) * 300,
-                y: -Math.random() * 200 - 50,
+                x: (Math.random() - 0.5) * 450,
+                y: -Math.random() * 350 - 50,
                 rotate: Math.random() * 720,
               }}
-              transition={{ duration: 2.5, delay: 0.03 * i, ease: 'easeOut' }}
+              transition={{ duration: 3.5, delay: 0.02 * i, ease: 'easeOut' }}
               className="absolute rounded-sm"
               style={{
                 left: '50%',
                 top: '40%',
-                width: `${4 + Math.random() * 6}px`,
-                height: `${4 + Math.random() * 6}px`,
-                backgroundColor: [COLORS.orange, COLORS.blue, COLORS.green, '#FFD700', '#FF6B6B'][i % 5],
+                width: `${5 + Math.random() * 8}px`,
+                height: `${5 + Math.random() * 8}px`,
+                backgroundColor: [COLORS.orange, COLORS.blue, COLORS.green, '#FFD700', '#FF6B6B', '#A855F7'][i % 6],
+              }}
+            />
+          ))}
+
+        {/* Confetti particles — wave 2 (delayed) */}
+        {showCheckmark &&
+          [...Array(20)].map((_, i) => (
+            <motion.div
+              key={`c2-${i}`}
+              initial={{ opacity: 1, x: 0, y: 0 }}
+              animate={{
+                opacity: 0,
+                x: (Math.random() - 0.5) * 350,
+                y: -Math.random() * 250 - 80,
+                rotate: Math.random() * 540,
+              }}
+              transition={{ duration: 3, delay: 0.8 + 0.03 * i, ease: 'easeOut' }}
+              className="absolute rounded-full"
+              style={{
+                left: '50%',
+                top: '40%',
+                width: `${3 + Math.random() * 5}px`,
+                height: `${3 + Math.random() * 5}px`,
+                backgroundColor: [COLORS.green, '#FFD700', COLORS.blue, COLORS.orange][i % 4],
               }}
             />
           ))}
 
         {/* Progress circle */}
-        <div className="relative w-36 h-36 mb-8 z-10">
+        <div className="relative w-40 h-40 mb-8 z-10">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="52" fill="none" stroke="#f1f5f9" strokeWidth="8" />
-            <circle
-              cx="60" cy="60" r="52" fill="none"
-              stroke="url(#progressGradient)"
-              strokeWidth="8"
-              strokeDasharray={`${2 * Math.PI * 52}`}
-              strokeDashoffset={`${2 * Math.PI * 52 * (1 - Math.min(progress, 100) / 100)}`}
-              strokeLinecap="round"
-            />
             <defs>
-              <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id="progressGradient17" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor={COLORS.orange} />
                 <stop offset="50%" stopColor={COLORS.green} />
                 <stop offset="100%" stopColor={COLORS.blue} />
               </linearGradient>
+              <filter id="progressGlow17">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
             </defs>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#f1f5f9" strokeWidth="10" />
+            <circle
+              cx="60" cy="60" r="52" fill="none"
+              stroke="url(#progressGradient17)"
+              strokeWidth="10"
+              strokeDasharray={`${2 * Math.PI * 52}`}
+              strokeDashoffset={`${2 * Math.PI * 52 * (1 - Math.min(progress, 100) / 100)}`}
+              strokeLinecap="round"
+              filter="url(#progressGlow17)"
+            />
           </svg>
 
           <div className="absolute inset-0 flex items-center justify-center">
@@ -2082,14 +1893,17 @@ export function Step17Visual() {
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: 'spring', stiffness: 200, damping: 12 }}
                 >
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: COLORS.green }}>
-                    <Check size={36} className="text-white" strokeWidth={3} />
+                  <div
+                    className="w-20 h-20 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: COLORS.green, boxShadow: `0 0 30px ${COLORS.green}50, 0 0 60px ${COLORS.green}20` }}
+                  >
+                    <Check size={42} className="text-white" strokeWidth={3} />
                   </div>
                 </motion.div>
               ) : (
                 <motion.p
                   key="percent"
-                  className="text-3xl font-bold"
+                  className="text-4xl font-bold"
                   style={{ color: COLORS.green }}
                 >
                   {Math.round(Math.min(progress, 100))}%
@@ -2106,8 +1920,10 @@ export function Step17Visual() {
           transition={{ delay: 0.6, duration: 0.5 }}
           className="text-center z-10"
         >
-          <h2 className="text-3xl font-bold text-slate-900 mb-2">Setup Complete!</h2>
-          <p className="text-base text-slate-500 max-w-sm">
+          <h2 className="text-4xl font-bold mb-3 bg-gradient-to-r from-[#A2AD1A] via-[#E06D00] to-[#1a73e8] bg-clip-text text-transparent">
+            Setup Complete!
+          </h2>
+          <p className="text-lg text-slate-500 max-w-sm">
             Your Google Business Profile is optimized and connected to GoodTherapy.
           </p>
         </motion.div>
@@ -2119,14 +1935,16 @@ export function Step17Visual() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, type: 'spring', stiffness: 150 }}
-              className="mt-8 p-5 rounded-xl border-2 w-full max-w-sm z-10"
+              className="mt-8 p-6 rounded-2xl border-2 w-full max-w-sm z-10"
               style={{
                 borderColor: COLORS.green,
                 background: `linear-gradient(135deg, ${COLORS.lightGreen}, white)`,
               }}
             >
               <div className="flex items-center gap-3">
-                <Sparkles size={20} style={{ color: COLORS.green }} />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${COLORS.green}15` }}>
+                  <Sparkles size={22} style={{ color: COLORS.green }} />
+                </div>
                 <div>
                   <p className="text-sm font-bold" style={{ color: COLORS.green }}>All steps completed</p>
                   <p className="text-xs text-slate-500">Your profiles are now aligned</p>

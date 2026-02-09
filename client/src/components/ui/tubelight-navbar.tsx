@@ -2,15 +2,11 @@
 
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-// import Link from "next/link" - Removed unused import for Vite compatibility
-// Actually, steps-data.tsx uses standard exports.
-// I will use standard <a> tags or framer-motion for scrolling.
-// Let's use <a> for external and simple navigation.
 
 import { LucideIcon, Home, Mail, ChevronDown, CheckCircle2 } from "lucide-react"
 import { cn } from "@/lib/utils"
-// Import steps data
 import { STEPS } from "@/lib/steps-data";
+import { EmailPopup } from "@/components/ui/EmailPopup";
 
 interface NavItem {
     name: string
@@ -18,7 +14,8 @@ interface NavItem {
     icon: LucideIcon
     iconRight?: LucideIcon
     action?: () => void
-    children?: { name: string; url: string }[]
+    showEmailPopup?: boolean
+    children?: { name: string; url: string; action?: () => void }[]
     className?: string
 }
 
@@ -31,6 +28,7 @@ export function NavBar({ items, className }: NavBarProps) {
     const [activeTab, setActiveTab] = useState(items[0].name)
     const [isMobile, setIsMobile] = useState(false)
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const [emailPopupOpen, setEmailPopupOpen] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -69,7 +67,11 @@ export function NavBar({ items, className }: NavBarProps) {
                                 onClick={(e) => {
                                     e.stopPropagation(); // Prevent closing immediately
                                     setActiveTab(item.name);
-                                    if (item.action) item.action();
+                                    if (item.showEmailPopup) {
+                                        setEmailPopupOpen(true);
+                                    } else if (item.action) {
+                                        item.action();
+                                    }
                                     if (hasChildren) {
                                         setOpenDropdown(openDropdown === item.name ? null : item.name);
                                     } else {
@@ -124,9 +126,15 @@ export function NavBar({ items, className }: NavBarProps) {
                                             {item.children?.map((child, idx) => (
                                                 <a
                                                     key={idx}
-                                                    href={child.url}
-                                                    className="px-4 py-3 text-sm text-gray-700 hover:bg-black/5 rounded-xl transition-colors text-left flex items-start gap-2"
-                                                    onClick={() => setOpenDropdown(null)}
+                                                    href={child.action ? undefined : child.url}
+                                                    className="px-4 py-3 text-sm text-gray-700 hover:bg-black/5 rounded-xl transition-colors text-left flex items-start gap-2 cursor-pointer"
+                                                    onClick={(e) => {
+                                                        if (child.action) {
+                                                            e.preventDefault();
+                                                            child.action();
+                                                        }
+                                                        setOpenDropdown(null);
+                                                    }}
                                                 >
                                                     <div className="mt-0.5 min-w-[20px] h-5 flex items-center justify-center bg-orange-50 rounded-full text-[10px] font-bold text-orange-500">
                                                         {idx + 1}
@@ -142,6 +150,9 @@ export function NavBar({ items, className }: NavBarProps) {
                     )
                 })}
             </div>
+
+            {/* Email Popup */}
+            <EmailPopup open={emailPopupOpen} onClose={() => setEmailPopupOpen(false)} />
         </div>
     )
 }

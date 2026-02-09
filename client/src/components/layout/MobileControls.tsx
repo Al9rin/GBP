@@ -34,7 +34,7 @@ export function MobileControls({ currentStep, onNext, onPrev }: MobileControlsPr
           </div>
           <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#A2AD1A] to-green-500"
+              className="h-full bg-gradient-to-r from-[#A2AD1A] to-[#c4d030]"
               animate={{ width: `${progress}%` }}
               transition={{ type: "spring", stiffness: 100 }}
             />
@@ -47,7 +47,7 @@ export function MobileControls({ currentStep, onNext, onPrev }: MobileControlsPr
           whileHover={{ scale: 1.05 }}
           onClick={onNext}
           disabled={isLast}
-          className="relative rounded-full p-3 bg-gradient-to-r from-[#A2AD1A] to-green-500 text-white shadow-lg shadow-green-500/20 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden"
+          className="relative rounded-full p-3 bg-gradient-to-r from-[#A2AD1A] to-[#c4d030] text-white shadow-lg shadow-[#A2AD1A]/20 disabled:opacity-30 disabled:cursor-not-allowed overflow-hidden"
         >
           {/* Shimmer effect */}
           <div className="absolute inset-0 overflow-hidden rounded-full">

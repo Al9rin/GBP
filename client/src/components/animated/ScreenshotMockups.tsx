@@ -21,11 +21,15 @@ interface GoogleSearchMockupProps {
  * Google Search results mockup with business listing
  * Interactive version with typing simulation and realistic UI
  */
+/**
+ * Google Search results mockup with business listing
+ * Interactive version with typing simulation and realistic UI
+ */
 export function GoogleSearchMockup({
   practiceExample = {
-    name: "Example Therapy Practice",
-    rating: 4.8,
-    type: "Mental health service",
+    name: "Your Practice Name",
+    rating: 5.0,
+    type: "Mental Health Provider",
     address: "123 Main St, City, ST 12345",
   },
   highlightElements = [],
@@ -34,85 +38,88 @@ export function GoogleSearchMockup({
 
   // Static state for immediate readability
   const [query] = useState("therapist near me");
-  const [isSearching] = useState(false);
-  const [hasSearched] = useState(true);
 
   return (
-    <DeviceFrame type="browser" className="w-full max-w-3xl mx-auto h-[560px]">
-      <div className="bg-white flex-1 flex flex-col overflow-hidden relative">
-        {/* Header Section */}
-        <div className="border-b border-slate-100 p-4 pb-0 flex-shrink-0 flex flex-col items-center">
-          <div className="flex items-center justify-center w-full mb-4 relative max-w-2xl px-4">
+    <div className="w-full h-full bg-white flex flex-col overflow-hidden relative">
+      {/* Header Section */}
+      <div className="border-b border-slate-100 p-4 pb-0 flex-shrink-0 flex flex-col items-center">
+        <div className="flex items-center justify-center w-full mb-4 relative max-w-2xl px-4">
 
-            <div className="flex-1 max-w-xl relative mx-4">
-              <input
-                value={query}
-                readOnly
-                className="w-full h-12 pl-6 pr-14 rounded-full border border-slate-200 shadow-sm outline-none text-base text-slate-800"
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                <span className="text-slate-400 cursor-pointer">×</span>
-                <div className="w-px h-5 bg-slate-200" />
-                <GoogleSearchIcon className="w-5 h-5 text-blue-500" />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 ml-auto flex-shrink-0">
-              <div className="w-8 h-8 rounded-full hover:bg-slate-100 cursor-pointer flex items-center justify-center p-1.5 ">
-                <div className="grid grid-cols-3 gap-0.5 w-full h-full opacity-60">
-                  {[...Array(9)].map((_, i) => <div key={i} className="bg-slate-600 rounded-full" />)}
-                </div>
-              </div>
-              <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium shadow-sm">G</div>
+          <div className="flex-1 max-w-xl relative mx-4">
+            <input
+              value={query}
+              readOnly
+              className="w-full h-11 pl-5 pr-14 rounded-full border border-slate-200 shadow-sm outline-none text-base text-slate-800"
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+              <span className="text-slate-400 cursor-pointer">×</span>
+              <div className="w-px h-5 bg-slate-200" />
+              <GoogleSearchIcon className="w-5 h-5 text-blue-500" />
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex items-center gap-8 text-sm text-slate-600 w-full justify-center max-w-2xl">
-            <div className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium px-1 cursor-pointer">All</div>
-            <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">Maps</div>
-            <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">Images</div>
-            <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">News</div>
+          <div className="flex items-center gap-4 ml-auto flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-medium shadow-sm">
+              {practiceExample.name[0]}
+            </div>
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto bg-white p-6 pt-6">
-          {isSearching ? (
-            <div className="space-y-4 max-w-2xl mx-auto animate-pulse">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="space-y-2">
-                  <div className="h-4 bg-slate-100 rounded w-1/3" />
-                  <div className="h-4 bg-slate-100 rounded w-3/4" />
-                </div>
-              ))}
-            </div>
-          ) : hasSearched ? (
-            <div className="flex justify-center max-w-4xl mx-auto px-4">
-              {/* Main Results Column Centered */}
-              <div className="w-full space-y-6">
-                <div className="text-xs text-slate-500">About 1,240,000 results (0.52 seconds)</div>
-
-                {/* Organic Result 1 - GoodTherapy */}
-                <div className="space-y-2 text-sm bg-white p-4 rounded-lg hover:bg-slate-50 transition-colors">
-                  <div className="flex items-center gap-3 text-slate-800 mb-2">
-                    <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 flex-shrink-0">
-                      <img src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/08/cropped-GT-Logo-icon.png" alt="GT" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex flex-col leading-none">
-                      <span className="font-medium text-slate-900 text-sm">GoodTherapy</span>
-                      <span className="text-slate-500 text-xs">https://www.goodtherapy.org</span>
-                    </div>
-                  </div>
-                  <h3 className="text-xl text-[#1a0dab] hover:underline cursor-pointer font-medium">Therapists in {practiceExample.address?.split(',')[1]?.trim() || "Your City"} | GoodTherapy</h3>
-                  <p className="text-slate-600 leading-normal max-w-3xl">Find the right therapist for you. Choose from thousands of verified mental health professionals. Read reviews, compare expertise, and check availability. Our diverse directory includes counselors for anxiety, depression, relationships, and more.</p>
-                </div>
-              </div>
-            </div>
-          ) : null}
+        {/* Tabs */}
+        <div className="flex items-center gap-6 text-sm text-slate-600 w-full justify-center max-w-2xl">
+          <div className="pb-3 border-b-2 border-blue-600 text-blue-600 font-medium px-1 cursor-pointer">All</div>
+          <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">Maps</div>
+          <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">Images</div>
+          <div className="pb-3 border-b-2 border-transparent hover:text-slate-900 cursor-pointer px-1">News</div>
         </div>
       </div>
-    </DeviceFrame>
+
+      {/* Content Area */}
+      <div className="flex-1 overflow-y-auto bg-white p-4">
+        <div className="flex justify-center max-w-3xl mx-auto">
+          {/* Main Results Column Centered */}
+          <div className="w-full space-y-4">
+
+            {/* Business Profile Snippet (Local Pack Style) */}
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
+              <div className="p-4">
+                <h3 className="text-xl text-[#1a0dab] font-medium mb-1">{practiceExample.name}</h3>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-slate-700">{practiceExample.rating}</span>
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <span className="text-slate-500 text-sm">({225})</span>
+                </div>
+                <div className="text-sm text-slate-500 mb-2">{practiceExample.type}</div>
+                <div className="text-sm text-slate-700">
+                  <span className="text-green-700 font-medium">Open</span> · Closes at 6 p.m.
+                </div>
+                <div className="text-sm text-slate-500 mt-1">See more hours</div>
+              </div>
+            </div>
+
+
+            {/* Organic Result 1 - GoodTherapy */}
+            <div className="space-y-1 text-sm bg-white p-4 rounded-lg hover:bg-slate-50 transition-colors">
+              <div className="flex items-center gap-3 text-slate-800 mb-1">
+                <div className="w-7 h-7 rounded-full overflow-hidden border border-slate-200 flex-shrink-0">
+                  <img src="https://www.goodtherapy.org/blog/blog/wp-content/uploads/2025/08/cropped-GT-Logo-icon.png" alt="GT" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex flex-col leading-none">
+                  <span className="font-medium text-slate-900 text-sm">GoodTherapy</span>
+                  <span className="text-slate-500 text-xs">https://www.goodtherapy.org</span>
+                </div>
+              </div>
+              <h3 className="text-xl text-[#1a0dab] hover:underline cursor-pointer font-medium">Therapists in {practiceExample.address?.split(',')[1]?.trim() || "Your City"} | GoodTherapy</h3>
+              <p className="text-slate-600 leading-normal max-w-3xl">GoodTherapy is a directory of thousands of licensed therapists and counselors offering a wide variety of therapy, counselling & mental health services.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -122,136 +129,79 @@ interface GoogleMapsMockupProps {
 }
 
 /**
- * Google Maps interface mockup with pin and info card
- * Interactive version with clickable pins and improved map visuals
+ * Google Maps interface mockup
+ * Full map view with pin
  */
 export function GoogleMapsMockup({
   showServiceArea = false,
   highlightPin = false,
 }: GoogleMapsMockupProps) {
-  const [selectedPin, setSelectedPin] = useState(false);
-
-  // Auto-select pin if highlighted
-  useEffect(() => {
-    if (highlightPin) {
-      const timer = setTimeout(() => setSelectedPin(true), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [highlightPin]);
 
   return (
-    <DeviceFrame type="browser" className="w-full max-w-3xl mx-auto">
-      <div className="relative bg-[#E5E3DF] h-[500px] overflow-hidden group">
-        {/* Map Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src="/map-bg-v2.jpg"
-            alt="Map Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/5 mix-blend-multiply pointer-events-none" />
-        </div>
-
-        {/* Map UI Elements */}
-        {/* Search Box */}
-        <div className="absolute top-4 left-4 right-auto z-20 bg-white rounded-xl shadow-lg border border-slate-100 p-2 pl-4 w-96 flex items-center gap-3">
-          <span className="text-slate-700 text-base flex-1 font-medium">Therapists near me</span>
-          <div className="flex gap-3 items-center pr-2">
-            <Search className="w-5 h-5 text-blue-600 cursor-pointer" />
-            <div className="w-8 h-8 bg-purple-100 rounded-full text-purple-700 flex items-center justify-center text-sm font-bold border border-purple-200">G</div>
-          </div>
-        </div>
-
-        {/* Service area circle REMOVED per user request */}
-        {/* {showServiceArea && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 0.15 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-blue-500 border-2 border-blue-600 mix-blend-multiply"
-          />
-        )} */}
-
-        {/* Other Pins (Background noise) */}
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-3 h-3 bg-red-400 rounded-full shadow-sm"
-            style={{
-              top: `${20 + i * 25}%`,
-              left: `${20 + i * 30}%`,
-              opacity: 0.6
-            }}
-          />
-        ))}
-
-        {/* Main Pin */}
-        <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full z-10 cursor-pointer"
-          onClick={() => setSelectedPin(!selectedPin)}
-          whileHover={{ scale: 1.1 }}
-        >
-          <motion.div
-            animate={highlightPin && !selectedPin ? { scale: [1, 1.2, 1] } : {}}
-            transition={highlightPin && !selectedPin ? { repeat: Infinity, duration: 2 } : {}}
-          >
-            <GoogleMapsPin className="w-12 h-12 drop-shadow-xl" />
-          </motion.div>
-          {/* Shadow */}
-          <div className="w-4 h-1.5 bg-black/20 rounded-full blur-[2px] mx-auto mt-[-4px]" />
-        </motion.div>
-
-        {/* Info Card */}
-        <AnimatePresence>
-          {selectedPin && (
-            <motion.div
-              initial={{ y: 50, opacity: 0, scale: 0.95 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 20, opacity: 0, scale: 0.95 }}
-              className="absolute bottom-6 left-6 z-30 bg-white rounded-xl shadow-2xl p-0 w-72 overflow-hidden border border-slate-100"
-            >
-              <div className="h-24 bg-slate-200 relative">
-                <div className="absolute top-2 right-2 flex gap-1">
-                  <div className="w-7 h-7 bg-white/90 rounded-full flex items-center justify-center hover:bg-white cursor-pointer"><ShareLinkMockup platform="mobile" autoPlay={false} /></div>
-                  <div className="w-7 h-7 bg-white/90 rounded-full flex items-center justify-center hover:bg-white cursor-pointer" onClick={() => setSelectedPin(false)}>×</div>
-                </div>
-              </div>
-              <div className="p-4 pt-3">
-                <h3 className="font-semibold text-lg mb-1 text-slate-900">Example Therapy Practice</h3>
-                <div className="flex items-center gap-1.5 mb-2">
-                  <span className="font-bold text-sm">4.8</span>
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <span className="text-xs text-slate-500">(127)</span>
-                </div>
-                <p className="text-xs text-slate-600 mb-3 border-b pb-3">Mental health service · 2.4 mi</p>
-                <div className="flex gap-2">
-                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full text-xs font-medium transition-colors">Directions</button>
-                  <button className="flex-1 border border-slate-300 hover:bg-slate-50 text-blue-700 py-2 rounded-full text-xs font-medium transition-colors">Save</button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Zoom controls + Compass */}
-        <div className="absolute right-4 bottom-8 flex flex-col gap-4">
-          <div className="bg-white rounded-lg shadow-md p-2 cursor-pointer hover:bg-slate-50">
-            <div className="w-4 h-4 rounded-full border-2 border-red-500 border-t-red-600" />
-          </div>
-          <div className="bg-white rounded-lg shadow-md overflow-hidden text-slate-600 flex flex-col">
-            <button className="p-3 hover:bg-slate-50 border-b active:bg-slate-100">+</button>
-            <button className="p-3 hover:bg-slate-50 active:bg-slate-100">−</button>
-          </div>
-        </div>
+    <div className="w-full h-full bg-[#E5E3DF] overflow-hidden relative group">
+      {/* Map Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src="/map.png"
+          alt="Map Background"
+          className="w-full h-full object-cover"
+        />
       </div>
-    </DeviceFrame>
+
+      {/* View Larger Map Badge (Top Left) */}
+      <div className="absolute top-3 left-3 bg-white px-3 py-2 rounded-sm shadow-sm z-10">
+        <span className="text-blue-600 font-medium text-sm">View larger map</span>
+      </div>
+
+      {/* Zoom Controls (Bottom Right) */}
+      <div className="absolute bottom-6 right-6 flex flex-col gap-1 z-10">
+        <button className="w-8 h-8 bg-white rounded-sm shadow-sm flex items-center justify-center text-slate-600 hover:text-black font-bold text-lg leading-none pb-1">+</button>
+        <button className="w-8 h-8 bg-white rounded-sm shadow-sm flex items-center justify-center text-slate-600 hover:text-black font-bold text-lg leading-none pb-1">−</button>
+      </div>
+
+
+      {/* Main Pin */}
+      <motion.div
+        initial={{ y: -500, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, type: "spring", stiffness: 100, damping: 20 }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-full z-10"
+      >
+        <GoogleMapsPin className="w-12 h-12 drop-shadow-md text-red-600" />
+      </motion.div>
+
+      {/* Result Card (Bottom Left) */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="absolute bottom-6 left-6 z-30 w-80 bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200"
+      >
+        <div className="p-4">
+          <h3 className="font-medium text-base text-slate-900 mb-1">Your Practice Name</h3>
+          <div className="flex items-center gap-1 mb-1">
+            <span className="text-sm font-medium text-slate-700">5.0</span>
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 fill-current" />
+              ))}
+            </div>
+            <span className="text-xs text-slate-500">(225)</span>
+          </div>
+          <div className="text-xs text-slate-600 mb-3">
+            Mental Health Provider · Open · Closes at 6 p.m.
+          </div>
+          <div className="flex gap-2">
+            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1.5 rounded-full transition-colors">
+              Directions
+            </button>
+            <button className="flex-1 border border-slate-300 hover:bg-slate-50 text-blue-600 text-xs font-medium py-1.5 rounded-full transition-colors">
+              Save
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -366,7 +316,7 @@ export function ShareLinkMockup({
               animate={{ opacity: 1, scale: 1 }}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-green-50 border-2 border-green-200 rounded-xl p-4 shadow-xl z-40 text-center max-w-[200px]"
             >
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-[#A2AD1A] rounded-full flex items-center justify-center mx-auto mb-2">
                 <Check className="w-6 h-6 text-white" />
               </div>
               <p className="font-semibold text-green-900 text-sm">Link Copied!</p>
@@ -439,7 +389,7 @@ export function GBPDashboardMockup() {
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSave}
                 className={`px-6 py-2 rounded-full font-medium text-sm transition-all shadow-sm ${saveStatus === "saved"
-                  ? "bg-green-600 text-white"
+                  ? "bg-[#A2AD1A] text-white"
                   : isEditing
                     ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md"
                     : "border border-slate-300 bg-white text-blue-600 hover:bg-blue-50"
@@ -755,15 +705,15 @@ export function PrivacyReminderMockup() {
             </h3>
             <ul className="space-y-2 text-sm text-blue-800">
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-[#A2AD1A] flex-shrink-0 mt-0.5" />
                 <span>Never share client names or protected health information</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-[#A2AD1A] flex-shrink-0 mt-0.5" />
                 <span>Keep responses professional and general</span>
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-4 h-4 text-[#A2AD1A] flex-shrink-0 mt-0.5" />
                 <span>Review all public-facing content carefully</span>
               </li>
             </ul>
