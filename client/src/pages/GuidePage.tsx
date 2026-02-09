@@ -16,7 +16,7 @@ export default function GuidePage() {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const completedStepIds = progressData 
+  const completedStepIds = progressData
     ? progressData.filter(p => p.status === 'completed').map(p => p.stepId)
     : [];
 
@@ -45,7 +45,7 @@ export default function GuidePage() {
     }
 
     const currentStepId = STEPS[currentStep].id;
-    
+
     updateProgress({ stepId: currentStepId, status: "completed" }, {
       onSuccess: () => {
         toast({
@@ -53,7 +53,7 @@ export default function GuidePage() {
           description: "Progress saved.",
           className: "bg-green-50 border-green-200 text-green-800",
         });
-        
+
         // Auto advance after short delay
         if (currentStep < STEPS.length - 1) {
           setTimeout(() => setCurrentStep(prev => prev + 1), 500);
@@ -93,25 +93,25 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Header 
-        currentStep={currentStep} 
-        completedSteps={completedStepIds} 
-        onStepClick={setCurrentStep} 
+      <Header
+        currentStep={currentStep}
+        completedSteps={completedStepIds}
+        onStepClick={setCurrentStep}
       />
 
       <div className="flex-1 flex overflow-hidden">
         {/* Desktop Sidebar */}
-        <Sidebar 
-          currentStep={currentStep} 
-          completedSteps={completedStepIds} 
+        <Sidebar
+          currentStep={currentStep}
+          completedSteps={completedStepIds}
           onStepClick={setCurrentStep}
-          className="hidden lg:flex" 
+          className="hidden lg:flex"
         />
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto relative custom-scrollbar bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-50/50 via-white to-white">
-          <div className="max-w-5xl mx-auto px-4 py-8 lg:py-12 pb-24 lg:pb-12">
-            <StepRenderer 
+          <div className="w-full h-full p-4 lg:p-8">
+            <StepRenderer
               stepIndex={currentStep}
               onComplete={handleStepComplete}
               isCompleted={isCurrentStepCompleted}
@@ -121,7 +121,7 @@ export default function GuidePage() {
         </main>
       </div>
 
-      <MobileControls 
+      <MobileControls
         currentStep={currentStep}
         onNext={handleNext}
         onPrev={handlePrev}
