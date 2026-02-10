@@ -37,6 +37,10 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
   const isFirstStep = stepIndex === 0;
   const [showEmailPopup, setShowEmailPopup] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [stepIndex]);
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4 lg:px-8 py-6 font-display relative">
       {/* Floating Navigation Arrows — Desktop Only */}
@@ -51,7 +55,7 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
               whileHover={{ scale: 1.15, x: -2 }}
               whileTap={{ scale: 0.9 }}
               onClick={onPrev}
-              className="fixed left-[calc(18rem+1.5rem)] top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[#A2AD1A]/30 shadow-lg shadow-[#A2AD1A]/10 flex items-center justify-center text-[#A2AD1A] hover:bg-[#A2AD1A] hover:text-white transition-colors duration-200 cursor-pointer"
+              className="fixed left-[calc(20rem+2.5rem)] top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-sm border border-[#A2AD1A]/30 shadow-lg shadow-[#A2AD1A]/10 flex items-center justify-center text-[#A2AD1A] hover:bg-[#A2AD1A] hover:text-white transition-colors duration-200 cursor-pointer"
               aria-label="Previous step"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -154,18 +158,23 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
 
               {/* Action Button */}
               {isLastStep ? (
-                <div className="relative w-full md:w-auto">
-                  <ShimmerButton
-                    onClick={() => setShowEmailPopup(true)}
-                    className="h-14 px-8 shadow-xl shadow-[#A2AD1A]/20 w-full md:w-auto"
-                    background="#A2AD1A"
+                <div className="relative w-full flex justify-center mt-8">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <Mail className="w-5 h-5 mr-2 text-white" />
-                    <span className="text-base font-bold tracking-wide mr-2 text-white">
-                      Email us your Google Business Profile link
-                    </span>
-                    <ExternalLink className="w-4 h-4 opacity-70 text-white" />
-                  </ShimmerButton>
+                    <ShimmerButton
+                      onClick={() => setShowEmailPopup(true)}
+                      className="h-14 px-8 shadow-xl shadow-[#A2AD1A]/20"
+                      background="#A2AD1A"
+                    >
+                      <Mail className="w-5 h-5 mr-2 text-white" />
+                      <span className="text-base font-bold tracking-wide mr-2 text-white">
+                        Email Your Google Business Profile Link
+                      </span>
+                      <ExternalLink className="w-4 h-4 opacity-70 text-white" />
+                    </ShimmerButton>
+                  </motion.div>
                   <EmailPopup open={showEmailPopup} onClose={() => setShowEmailPopup(false)} />
                 </div>
               ) : (
@@ -353,7 +362,7 @@ function ContentBody({ content, stepId }: any) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-[15px] text-slate-700 leading-[1.8] font-display"
+          className="text-[17px] text-slate-700 leading-[1.8] font-display"
         >
           {processText(content.intro)}
         </motion.p>
@@ -403,7 +412,7 @@ function ContentBody({ content, stepId }: any) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: i * 0.05 }}
-          className="text-[15px] text-slate-700 leading-[1.8] font-display"
+          className="text-[17px] text-slate-700 leading-[1.8] font-display"
         >
           {processText(p)}
         </motion.p>
@@ -421,7 +430,7 @@ function ContentBody({ content, stepId }: any) {
               className="flex items-start gap-3"
             >
               <div className="mt-1.5 w-2.5 h-2.5 rounded-full bg-orange-400 shrink-0" />
-              <span className="text-slate-700 text-[15px] leading-[1.8]">{processText(item)}</span>
+              <span className="text-slate-700 text-[17px] leading-[1.8]">{processText(item)}</span>
             </motion.li>
           ))}
         </ul>
@@ -441,7 +450,7 @@ function ContentBody({ content, stepId }: any) {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 shadow-md">
                 {i + 1}
               </div>
-              <p className="text-[15px] text-slate-700 leading-[1.8] font-display font-medium">{processText(stepText)}</p>
+              <p className="text-[17px] text-slate-700 leading-[1.8] font-display font-medium">{processText(stepText)}</p>
             </motion.div>
           ))}
         </div>
@@ -602,8 +611,8 @@ function ContentBody({ content, stepId }: any) {
         <div className="grid grid-cols-2 gap-3 my-6">
           {content.methods.map((method: any, idx: number) => {
             const colorMap = [
-              { bg: 'bg-blue-50',   border: 'border-blue-100',   text: 'text-blue-700'   },
-              { bg: 'bg-green-50',  border: 'border-green-100',  text: 'text-green-700'  },
+              { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-700' },
+              { bg: 'bg-green-50', border: 'border-green-100', text: 'text-green-700' },
               { bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-700' },
               { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-700' },
             ];
@@ -645,12 +654,12 @@ function ContentBody({ content, stepId }: any) {
                 {section.bullets?.map((bullet: string, bi: number) => (
                   <div key={bi} className="flex items-start gap-3">
                     <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-                    <span className="text-[15px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
+                    <span className="text-[17px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
                   </div>
                 ))}
                 {/* Section paragraphs */}
                 {section.paragraphs?.map((p: string, pi: number) => (
-                  <p key={pi} className="text-[15px] text-slate-600 leading-[1.8] font-display">{processText(p)}</p>
+                  <p key={pi} className="text-[17px] text-slate-600 leading-[1.8] font-display">{processText(p)}</p>
                 ))}
                 {/* Section steps */}
                 {section.steps?.map((stepText: string, si: number) => (
@@ -658,7 +667,7 @@ function ContentBody({ content, stepId }: any) {
                     <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                       {si + 1}
                     </div>
-                    <p className="text-[15px] text-slate-700 leading-[1.8] font-display">{processText(stepText)}</p>
+                    <p className="text-[17px] text-slate-700 leading-[1.8] font-display">{processText(stepText)}</p>
                   </div>
                 ))}
               </div>
@@ -669,7 +678,7 @@ function ContentBody({ content, stepId }: any) {
                     <div className="absolute -top-2 left-4 bg-amber-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
                       Example
                     </div>
-                    <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{processText(section.example)}</p>
+                    <p className="text-[15px] text-slate-700 italic leading-relaxed mt-1">{processText(section.example)}</p>
                   </div>
                 </div>
               )}
@@ -692,143 +701,167 @@ function ContentBody({ content, stepId }: any) {
               <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0 mt-0.5">
                 <AlertTriangle size={12} />
               </div>
-              <span className="text-[15px] text-slate-700 leading-[1.8] font-medium">{guideline}</span>
+              <span className="text-[17px] text-slate-700 leading-[1.8] font-medium">{guideline}</span>
             </motion.div>
           ))}
         </div>
       )}
 
       {/* Tip Callout */}
-      {content.tip && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 shadow-sm ring-1 ring-amber-200/50"
-        >
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-amber-400 text-white flex items-center justify-center shrink-0">
-              <Lightbulb size={16} />
+      {
+        content.tip && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 shadow-sm ring-1 ring-amber-200/50"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-amber-400 text-white flex items-center justify-center shrink-0">
+                <Lightbulb size={16} />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Pro Tip</span>
+                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.tip)}</p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Pro Tip</span>
-              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.tip)}</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )
+      }
 
       {/* Note Callout */}
-      {content.note && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 shadow-md"
-        >
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-              <Info size={16} />
+      {
+        content.note && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 shadow-md"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                <Info size={16} />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Note</span>
+                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.note)}</p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Note</span>
-              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.note)}</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )
+      }
 
       {/* Privacy Tip Callout */}
-      {content.privacyTip && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 shadow-sm"
-        >
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0">
-              <Shield size={16} />
+      {
+        content.privacyTip && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 shadow-sm"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0">
+                <Shield size={16} />
+              </div>
+              <div>
+                <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Privacy</span>
+                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.privacyTip)}</p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Privacy</span>
-              <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.privacyTip)}</p>
-            </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )
+      }
 
       {/* Example Block */}
-      {content.example && !content.sections && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-4 p-5 rounded-2xl bg-amber-50 border border-amber-200 relative"
-        >
-          <div className="absolute -top-2.5 left-4 bg-amber-400 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
-            Example
-          </div>
-          <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{content.example}</p>
-        </motion.div>
-      )}
+      {
+        content.example && !content.sections && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-4 p-5 rounded-2xl bg-amber-50 border border-amber-200 relative"
+          >
+            <div className="absolute -top-2.5 left-4 bg-amber-400 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
+              Example
+            </div>
+            <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{content.example}</p>
+          </motion.div>
+        )
+      }
 
       {/* Interactive Checklist (Step 4 & 17) */}
       {content.items && <InteractiveChecklist content={content} stepId={stepId} />}
 
       {/* What Happens Next (Step 17) */}
-      {content.whatHappensNext && (
-        <div className="mt-8 space-y-6">
-          <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <div className="w-1 h-6 bg-[#A2AD1A] rounded-full" />
-            {content.whatHappensNext.heading}
-          </h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {content.whatHappensNext.sections.map((section: any, idx: number) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className={cn(
-                  "p-5 rounded-2xl border-2 shadow-sm",
-                  idx === 0
-                    ? "bg-orange-50/50 border-orange-200"
-                    : "bg-green-50/50 border-green-200"
-                )}
-              >
-                <h4 className={cn(
-                  "font-bold text-sm mb-3",
-                  idx === 0 ? "text-orange-700" : "text-[#A2AD1A]"
-                )}>
-                  {section.title}
-                </h4>
-                <div className="space-y-2">
-                  {section.steps.map((s: string, si: number) => (
-                    <div key={si} className="flex items-start gap-2">
-                      <div className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5",
-                        idx === 0 ? "bg-orange-500" : "bg-[#A2AD1A]"
-                      )}>
-                        {si + 1}
+      {
+        content.whatHappensNext && (
+          <div className="mt-8 space-y-6">
+            <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <div className="w-1 h-6 bg-[#A2AD1A] rounded-full" />
+              {content.whatHappensNext.heading}
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {content.whatHappensNext.sections.map((section: any, idx: number) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className={cn(
+                    "p-5 rounded-2xl border-2 shadow-sm",
+                    idx === 0
+                      ? "bg-orange-50/50 border-orange-200"
+                      : "bg-green-50/50 border-green-200"
+                  )}
+                >
+                  <h4 className={cn(
+                    "font-bold text-sm mb-3",
+                    idx === 0 ? "text-orange-700" : "text-[#A2AD1A]"
+                  )}>
+                    {section.title}
+                  </h4>
+                  <div className="space-y-2">
+                    {/* Section bullets */}
+                    {section.bullets?.map((bullet: string, bi: number) => (
+                      <div key={bi} className="flex items-start gap-3">
+                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                        <span className="text-[17px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
                       </div>
-                      <p className="text-xs text-slate-700 leading-relaxed">{processText(s)}</p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+                    ))}
+                    {/* Section paragraphs */}
+                    {section.paragraphs?.map((p: string, pi: number) => (
+                      <p key={pi} className="text-[17px] text-slate-600 leading-[1.8] font-display">{processText(p)}</p>
+                    ))}
+                    {/* Section steps */}
+                    {section.steps.map((s: string, si: number) => (
+                      <div key={si} className="flex items-start gap-2">
+                        <div className={cn(
+                          "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5",
+                          idx === 0 ? "bg-orange-500" : "bg-[#A2AD1A]"
+                        )}>
+                          {si + 1}
+                        </div>
+                        <p className="text-xs text-slate-700 leading-relaxed">{processText(s)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Conclusion */}
-      {content.conclusion && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200"
-        >
-          <p className="text-sm text-slate-700 leading-relaxed font-medium">{processText(content.conclusion)}</p>
-        </motion.div>
-      )}
-    </div>
+      {
+        content.conclusion && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200"
+          >
+            <p className="text-sm text-slate-700 leading-relaxed font-medium">{processText(content.conclusion)}</p>
+          </motion.div>
+        )
+      }
+    </div >
   );
 }
 

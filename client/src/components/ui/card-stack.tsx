@@ -13,6 +13,7 @@ export type CardStackItem = {
     href?: string;
     ctaLabel?: string;
     tag?: string;
+    imageClassName?: string;
 };
 
 export type CardStackProps<T extends CardStackItem> = {
@@ -268,11 +269,11 @@ export function CardStack<T extends CardStackItem>({
                                 <motion.div
                                     key={item.id}
                                     className={cn(
-                                        "absolute bottom-0 rounded-2xl border-4 border-black/10 dark:border-white/10 overflow-hidden shadow-xl",
+                                        "absolute bottom-0 rounded-2xl border-2 border-white/50 overflow-hidden",
                                         "will-change-transform select-none",
                                         isActive
-                                            ? "cursor-grab active:cursor-grabbing"
-                                            : "cursor-pointer",
+                                            ? "cursor-grab active:cursor-grabbing shadow-[0_20px_50px_-12px_rgba(162,173,26,0.5)] border-[#A2AD1A]/20"
+                                            : "cursor-pointer shadow-2xl shadow-black/20",
                                     )}
                                     style={{
                                         width: cardWidth,
@@ -400,7 +401,7 @@ function DefaultFanCard({ item }: { item: CardStackItem; active: boolean }) {
                     <img
                         src={item.imageSrc}
                         alt={item.title}
-                        className="h-full w-full object-cover"
+                        className={cn("h-full w-full object-cover", item.imageClassName)}
                         draggable={false}
                         loading="eager"
                     />

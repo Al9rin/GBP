@@ -94,7 +94,7 @@ export default function GuidePage() {
       <AnimatedBackground />
 
       {/* Tubelight Navbar */}
-      <NavBar items={navItems} />
+      <NavBar items={navItems} offsetForSidebar />
 
       {/* Header Logo - Top Left */}
       <header className="absolute top-6 left-6 z-40 pointer-events-none">

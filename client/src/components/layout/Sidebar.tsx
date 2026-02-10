@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { STEPS } from "@/lib/steps-data";
 import { motion } from "framer-motion";
@@ -13,14 +13,36 @@ interface SidebarProps {
 
 export function Sidebar({ currentStep, completedSteps, onStepClick, className }: SidebarProps) {
   const progress = ((currentStep + 1) / STEPS.length) * 100;
+  const listRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll the active step into view whenever currentStep changes
+  useEffect(() => {
+    if (activeRef.current && listRef.current) {
+      const list = listRef.current;
+      const item = activeRef.current;
+      const listRect = list.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+
+      // Calculate desired scroll: place active item roughly 1/3 from the top of the list
+      const targetOffset = listRect.height * 0.3;
+      const currentOffsetInList = item.offsetTop - list.offsetTop;
+      const scrollTo = currentOffsetInList - targetOffset;
+
+      list.scrollTo({
+        top: Math.max(0, scrollTo),
+        behavior: "smooth",
+      });
+    }
+  }, [currentStep]);
 
   return (
     <aside className={cn(
-      "w-72 h-screen flex flex-col sticky top-0",
-      "bg-gradient-to-b from-white/70 via-white/50 to-white/60",
-      "backdrop-blur-2xl",
-      "border-r border-white/40",
-      "shadow-[4px_0_24px_-2px_rgba(0,0,0,0.06)]",
+      "w-80 h-screen flex flex-col sticky top-0",
+      "bg-gradient-to-b from-white/80 via-white/60 to-white/70",
+      "backdrop-blur-3xl",
+      "border-r border-white/50",
+      "shadow-[4px_0_24px_-2px_rgba(0,0,0,0.08)]",
       className
     )}>
       {/* Header */}
@@ -66,7 +88,7 @@ export function Sidebar({ currentStep, completedSteps, onStepClick, className }:
       </div>
 
       {/* Steps List */}
-      <div className="flex-1 py-2 px-2 overflow-y-auto custom-scrollbar">
+      <div ref={listRef} className="flex-1 py-2 px-2 overflow-y-auto custom-scrollbar scroll-smooth">
         <div className="space-y-0.5">
           {STEPS.map((step, index) => {
             const isCurrent = currentStep === index;
@@ -75,19 +97,20 @@ export function Sidebar({ currentStep, completedSteps, onStepClick, className }:
             return (
               <motion.div
                 key={step.id}
+                ref={isCurrent ? activeRef : undefined}
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.03, duration: 0.3 }}
                 onClick={() => onStepClick(index)}
-                whileHover={{ x: 3 }}
+                whileHover={{ x: 4, scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  "relative flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium cursor-pointer transition-all duration-200",
+                  "relative flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium cursor-pointer transition-all duration-300",
                   isCurrent
-                    ? "bg-white/90 backdrop-blur-sm shadow-md shadow-[#A2AD1A]/10 border border-[#A2AD1A]/20"
+                    ? "bg-white/95 backdrop-blur-md shadow-lg shadow-[#A2AD1A]/10 border border-[#A2AD1A]/30"
                     : isPast
-                      ? "bg-white/30 hover:bg-white/60 text-slate-600"
-                      : "bg-transparent hover:bg-white/40 text-slate-400 hover:text-slate-600"
+                      ? "bg-white/40 hover:bg-white/70 text-slate-600 border border-transparent hover:border-white/50"
+                      : "bg-transparent hover:bg-white/50 text-slate-400 hover:text-slate-600 border border-transparent"
                 )}
               >
                 {/* Active indicator bar */}
@@ -127,7 +150,7 @@ export function Sidebar({ currentStep, completedSteps, onStepClick, className }:
                 {isCurrent && (
                   <motion.div
                     layoutId="sidebar-dot"
-                    className="w-1.5 h-1.5 rounded-full bg-[#A2AD1A]"
+                    className="w-2 h-2 rounded-full bg-[#A2AD1A] flex-shrink-0 self-center"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}

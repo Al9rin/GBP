@@ -22,9 +22,10 @@ interface NavItem {
 interface NavBarProps {
     items: NavItem[]
     className?: string
+    offsetForSidebar?: boolean
 }
 
-export function NavBar({ items, className }: NavBarProps) {
+export function NavBar({ items, className, offsetForSidebar = false }: NavBarProps) {
     const [activeTab, setActiveTab] = useState(items[0].name)
     const [isMobile, setIsMobile] = useState(false)
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -47,14 +48,29 @@ export function NavBar({ items, className }: NavBarProps) {
         return () => document.removeEventListener("click", handleClickOutside);
     }, []);
 
+    // When offsetForSidebar is true, shift the navbar so it's centered over the content area (right of the 20rem sidebar)
+    // The sidebar is w-80 = 20rem = 320px. We want the navbar centered in the remaining space.
+    // CSS: left = sidebarWidth + (remainingWidth / 2) = 20rem + calc((100% - 20rem) / 2)
+    // Simplified: left = calc(50% + 10rem) — which centers it in the area to the right of the sidebar
+
     return (
-        <div
+        <motion.div
             className={cn(
-                "fixed top-0 left-1/2 -translate-x-1/2 z-50 pt-6", // Fixed to top
+                "fixed top-0 z-50 pt-6 w-full max-w-[95%] md:max-w-[850px] lg:max-w-[950px]",
                 className,
             )}
+            initial={false}
+            animate={{
+                left: offsetForSidebar ? "calc(50% + 10rem)" : "50%",
+                x: "-50%",
+            }}
+            transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 30,
+            }}
         >
-            <div className="flex items-center gap-3 bg-background/5 border border-white/10 backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
+            <div className="flex items-center justify-between gap-1 bg-background/5 border border-white/10 backdrop-blur-xl py-1.5 px-2 rounded-full shadow-2xl w-full">
                 {items.map((item) => {
                     const Icon = item.icon
                     const IconRight = item.iconRight
@@ -79,7 +95,7 @@ export function NavBar({ items, className }: NavBarProps) {
                                     }
                                 }}
                                 className={cn(
-                                    "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors flex items-center gap-2",
+                                    "relative cursor-pointer text-sm font-semibold px-5 py-2 rounded-full transition-colors flex items-center gap-1.5 whitespace-nowrap",
                                     "text-foreground/80 hover:text-primary",
                                     isActive && "bg-transparent border border-primary/20 text-primary",
                                     item.className
@@ -87,10 +103,10 @@ export function NavBar({ items, className }: NavBarProps) {
                             >
                                 <span className="hidden md:inline">{item.name}</span>
                                 <span className="md:hidden">
-                                    <Icon size={18} strokeWidth={2.5} />
+                                    <Icon size={20} strokeWidth={2.5} />
                                 </span>
-                                {hasChildren && <ChevronDown size={14} className={cn("transition-transform", openDropdown === item.name ? "rotate-180" : "")} />}
-                                {IconRight && <IconRight size={16} strokeWidth={2.5} className="ml-1" />}
+                                {hasChildren && <ChevronDown size={16} className={cn("transition-transform", openDropdown === item.name ? "rotate-180" : "")} />}
+                                {IconRight && <IconRight size={18} strokeWidth={2.5} className="ml-1" />}
 
                                 {isActive && (
                                     <motion.div
@@ -103,10 +119,10 @@ export function NavBar({ items, className }: NavBarProps) {
                                             damping: 30,
                                         }}
                                     >
-                                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                                            <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                                            <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                                            <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
+                                        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary rounded-t-full">
+                                            <div className="absolute w-16 h-8 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
+                                            <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-1" />
+                                            <div className="absolute w-6 h-6 bg-primary/20 rounded-full blur-sm top-0 left-2" />
                                         </div>
                                     </motion.div>
                                 )}
@@ -153,6 +169,6 @@ export function NavBar({ items, className }: NavBarProps) {
 
             {/* Email Popup */}
             <EmailPopup open={emailPopupOpen} onClose={() => setEmailPopupOpen(false)} />
-        </div>
+        </motion.div>
     )
 }
