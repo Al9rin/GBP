@@ -56,7 +56,7 @@ export function GoogleMockup() {
             <motion.div
                 initial={{ opacity: 0, x: 200, y: 300, scale: 1 }}
                 animate={{
-                    opacity: stage === 'idle' ? 0 : [0, 1, 1, 0], // Fade in then out eventually
+                    opacity: stage === 'idle' ? 0 : stage === 'cursor-move' || stage === 'clicking' ? 1 : [1, 0], // Keep visible during move/click
                     x: stage === 'idle' ? 200 : stage === 'cursor-move' ? 0 : stage === 'clicking' ? 0 : 50, // Move to center then slightly away
                     y: stage === 'idle' ? 300 : stage === 'cursor-move' ? 10 : stage === 'clicking' ? 10 : 100,
                     scale: stage === 'clicking' ? 0.9 : 1,

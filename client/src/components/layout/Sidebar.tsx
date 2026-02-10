@@ -107,7 +107,7 @@ export function Sidebar({ currentStep, completedSteps, onStepClick, className }:
                 className={cn(
                   "relative flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium cursor-pointer transition-all duration-300",
                   isCurrent
-                    ? "bg-white/95 backdrop-blur-md shadow-lg shadow-[#A2AD1A]/10 border border-[#A2AD1A]/30"
+                    ? "bg-white shadow-md shadow-slate-200/50 border border-slate-200"
                     : isPast
                       ? "bg-white/40 hover:bg-white/70 text-slate-600 border border-transparent hover:border-white/50"
                       : "bg-transparent hover:bg-white/50 text-slate-400 hover:text-slate-600 border border-transparent"
@@ -117,7 +117,7 @@ export function Sidebar({ currentStep, completedSteps, onStepClick, className }:
                 {isCurrent && (
                   <motion.div
                     layoutId="sidebar-active-bar"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-[#A2AD1A]"
+                    className="absolute left-0 top-0 bottom-0 my-auto w-[3px] h-5 rounded-full bg-[#A2AD1A]"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}

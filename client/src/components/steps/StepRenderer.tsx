@@ -4,7 +4,7 @@ import {
   ArrowRight, CheckCircle, Sparkles, Search, Globe, TrendingUp,
   ClipboardCheck, LogIn, Building2, Tags, MapPin, Phone, Shield,
   Clock, Calendar, Camera, Send, ArrowRightCircle, Lock, ListChecks,
-  Lightbulb, Info, AlertTriangle, ChevronRight, ChevronLeft, ExternalLink, Mail
+  Lightbulb, Info, AlertTriangle, ChevronRight, ChevronLeft, ExternalLink, Mail, Copy
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
@@ -91,7 +91,22 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
           className="w-full"
         >
           {/* Main Card Container */}
-          <div className="relative bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 min-h-[600px] p-8 lg:p-16">
+          <div className={cn(
+            "relative bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border min-h-[600px] p-8 lg:p-16 transition-all duration-500",
+            step.id === 14 ? "border-amber-400 shadow-amber-100 ring-4 ring-amber-400/10" : "border-slate-100"
+          )}>
+            {/* Celebration Background for Step 14 */}
+            {step.id === 14 && (
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-amber-50/50 to-transparent opacity-60" />
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 blur-[100px] rounded-full"
+                />
+              </div>
+            )}
 
             {/* 1. Header & Text Content */}
             <div className="max-w-3xl mx-auto text-center mb-10">
@@ -178,23 +193,28 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
                   <EmailPopup open={showEmailPopup} onClose={() => setShowEmailPopup(false)} />
                 </div>
               ) : (
-                <ShimmerButton
-                  onClick={onNext}
-                  className="h-14 px-10 shadow-xl shadow-[#A2AD1A]/20 w-full md:w-auto"
-                  background="#A2AD1A"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <span className="text-lg font-bold tracking-wide mr-2 text-white">
-                    Next Step
-                  </span>
-                  <ArrowRight className="w-5 h-5 opacity-90 text-white group-hover:translate-x-1 transition-transform" />
-                </ShimmerButton>
+                  <ShimmerButton
+                    onClick={onNext}
+                    className="h-14 px-10 shadow-xl shadow-[#A2AD1A]/20 w-full md:w-auto"
+                    background="#A2AD1A"
+                  >
+                    <span className="text-lg font-bold tracking-wide mr-2 text-white">
+                      Next Step
+                    </span>
+                    <ArrowRight className="w-5 h-5 opacity-90 text-white group-hover:translate-x-1 transition-transform" />
+                  </ShimmerButton>
+                </motion.div>
               )}
             </motion.div>
 
           </div>
-        </motion.div>
-      </AnimatePresence>
-    </div>
+        </motion.div >
+      </AnimatePresence >
+    </div >
   );
 }
 
@@ -667,7 +687,14 @@ function ContentBody({ content, stepId }: any) {
                     <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                       {si + 1}
                     </div>
-                    <p className="text-[17px] text-slate-700 leading-[1.8] font-display">{processText(stepText)}</p>
+                    <p className="text-[17px] text-slate-700 leading-[1.8] font-display flex items-center gap-2 flex-wrap">
+                      {processText(stepText)}
+                      {(stepText.includes("Copy link") || stepText.includes("Copy the link")) && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider ml-1">
+                          <Copy size={12} /> Copy
+                        </span>
+                      )}
+                    </p>
                   </div>
                 ))}
               </div>

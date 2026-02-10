@@ -81,8 +81,10 @@ export const STEPS: StepDef[] = [
     icon: TrendingUp,
     type: "info",
     content: {
-      paragraphs: [
-        "A complete Google listing helps Google match you to relevant searches and display accurate information. It also helps people trust what they see because your details look <kw>consistent across platforms</kw>. Google's own guidance puts a lot of weight on accurate info (name, category, address or service area)."
+      list: [
+        "A complete Google listing helps Google match you to relevant searches and display accurate information.",
+        "It also helps people trust what they see because your details look <kw>consistent across platforms</kw>.",
+        "Google's own guidance puts a lot of weight on accurate info (name, category, address or service area)."
       ],
       heading: "The simple referral path you are building is:",
       flowSteps: [
@@ -175,10 +177,11 @@ export const STEPS: StepDef[] = [
         },
         {
           label: "No — service-area business",
-          description: "Choose \"No,\" add your <kw>service area</kw> (city/region where you serve clients), and continue"
+          description: "Choose \"No,\" add your <kw>service area</kw> (city/region where you serve clients), and continue. You must hide your address."
         }
       ],
-      note: "Google's rule of thumb: only hide your address if you are truly a service-area business. If you hide it, your profile shows your service area instead of a street address."
+      note: "<strong>Important:</strong> If you work from home and do not serve clients at that address (e.g., telehealth only), you <strong>must</strong> select 'No' and hide your address. Displaying a residential address where you don't receive customers can lead to suspension.",
+      privacyTip: "If you only work virtually, set a service area for the local region you serve and hide your address. Note: If you have no local service area and no in-person contact at all, you may not qualify for a Google Business Profile."
     }
   },
   {
@@ -209,12 +212,12 @@ export const STEPS: StepDef[] = [
       ],
       heading: "Common methods you may see:",
       methods: [
-        { name: "Postcard", steps: "Confirm the address, request it, then enter the code when it arrives" },
+        { name: "Video Recording", steps: "Record your location (street signs), equipment, and proof of management." },
         { name: "Phone or Text", steps: "Enter the code you receive" },
         { name: "Email", steps: "Enter the code you receive" },
-        { name: "Video Recording", steps: "Follow Google's steps and record what they request" }
+        { name: "Postcard", steps: "Request it, then enter the code when it arrives (slower)" }
       ],
-      tip: "If verification fails, double-check that your name, category, and address/service area are accurate and not stuffed with extra keywords. Google can restrict profiles that do not follow guidelines."
+      tip: "<strong>Video Prep:</strong> Google prompts many service-area businesses to verify by video. Be ready to show street signs or landmarks near you, your work tools/setup, and proof you manage the business (like unlocking a car or showing branded documents). Do not film clients or private files."
     }
   },
   {
@@ -260,7 +263,7 @@ export const STEPS: StepDef[] = [
       paragraphs: [
         "Google supports adding booking links, including adding your own link."
       ],
-      tip: "If you do not see \"Bookings,\" do not worry. Not every profile has the same options. Your \"Website\" link to <a-gt>GoodTherapy</a-gt> still does the job."
+      tip: "If you do not see \"Bookings,\" do not worry. Not every profile has the same options. If available, it can show as a <kw>Bookings/Appointment action</kw> on Search or Maps, which makes it easier for people to take the next step."
     }
   },
   {

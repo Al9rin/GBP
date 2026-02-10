@@ -7,6 +7,7 @@ import { STEPS } from "@/lib/steps-data";
 import { Home, Mail, List, UserPlus, ExternalLink } from "lucide-react";
 import { NavBar } from "@/components/ui/tubelight-navbar";
 import { AnimatedBackground } from "@/components/animated/AnimatedBackground";
+import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 
 export default function GuidePage() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -124,18 +125,22 @@ export default function GuidePage() {
         />
 
         {/* Main Content Area Wrapper */}
-        <div
-          ref={mainRef}
-          className="w-full flex-1 overflow-y-auto relative custom-scrollbar"
-        >
-          <div className="w-full p-4 lg:p-8 pb-32">
-            <StepRenderer
-              stepIndex={currentStep}
-              onNext={handleNext}
-              onPrev={handlePrev}
-            />
+        <div className="flex-1 relative flex flex-col overflow-hidden">
+          <div
+            ref={mainRef}
+            className="w-full flex-1 overflow-y-auto relative custom-scrollbar"
+          >
+            <div className="w-full p-4 lg:p-8 pb-32">
+              <StepRenderer
+                stepIndex={currentStep}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            </div>
           </div>
 
+          {/* Scroll Indicator - Positioned relative to this wrapper */}
+          <ScrollIndicator scrollRef={mainRef} />
         </div>
       </div>
 
@@ -144,6 +149,6 @@ export default function GuidePage() {
         onNext={handleNext}
         onPrev={handlePrev}
       />
-    </div>
+    </div >
   );
 }

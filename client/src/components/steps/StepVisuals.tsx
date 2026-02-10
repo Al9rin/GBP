@@ -48,7 +48,7 @@ const COLORS = {
 };
 
 // Animated cursor component reused across visuals
-function AnimatedCursor({ x, y, clicking = false }: { x: number; y: number; clicking?: boolean }) {
+function AnimatedCursor({ x, y, clicking = false }: { x: number | string; y: number | string; clicking?: boolean }) {
   return (
     <motion.div
       className="absolute z-50 pointer-events-none"
@@ -98,7 +98,7 @@ export function Step5Visual() {
   const [stage, setStage] = useState(0);
   // Stages: 0=idle, 1=typing email, 2=cursor to button, 3=clicking, 4=loading, 5=success
   const [emailText, setEmailText] = useState('');
-  const [cursorPos, setCursorPos] = useState({ x: 200, y: 180 });
+  const [cursorPos, setCursorPos] = useState<{ x: number | string; y: number | string }>({ x: 200, y: 180 });
   const [clicking, setClicking] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,7 @@ export function Step5Visual() {
     // Stage 0: Wait then start
     timeout = setTimeout(() => {
       setStage(1);
-      setCursorPos({ x: 150, y: 195 });
+      setCursorPos({ x: "50%", y: 195 }); // Center for typing
     }, 800);
 
     // Stage 1: Type email
@@ -122,7 +122,7 @@ export function Step5Visual() {
         } else {
           setTimeout(() => {
             setStage(2);
-            setCursorPos({ x: 180, y: 285 });
+            setCursorPos({ x: "50%", y: 320 }); // Move to button center
           }, 400);
         }
       };
@@ -473,9 +473,8 @@ export function Step7Visual() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.06 }}
-                    className={`px-4 py-3.5 flex items-center gap-3 cursor-pointer transition-colors border-b border-slate-50 last:border-b-0 ${
-                      idx === 0 ? 'bg-orange-50' : 'hover:bg-slate-50'
-                    }`}
+                    className={`px-4 py-3.5 flex items-center gap-3 cursor-pointer transition-colors border-b border-slate-50 last:border-b-0 ${idx === 0 ? 'bg-orange-50' : 'hover:bg-slate-50'
+                      }`}
                   >
                     <category.icon
                       size={18}
@@ -904,9 +903,9 @@ export function Step10Visual() {
                     animate={
                       isActive
                         ? idx === 0 ? { rotateY: [0, 180, 0] } // envelope flip
-                        : idx === 1 ? { x: [-2, 2, -2, 2, 0] } // phone vibrate
-                        : idx === 2 ? { y: [0, -5, 0] } // email bounce
-                        : { scale: [1, 1.15, 1] } // video pulse
+                          : idx === 1 ? { x: [-2, 2, -2, 2, 0] } // phone vibrate
+                            : idx === 2 ? { y: [0, -5, 0] } // email bounce
+                              : { scale: [1, 1.15, 1] } // video pulse
                         : {}
                     }
                     transition={{ duration: 0.6, repeat: isActive ? Infinity : 0, repeatDelay: 1 }}
@@ -1591,9 +1590,8 @@ export function Step15Visual() {
                         : '0 2px 8px rgba(0,0,0,0.06)',
                   }}
                   transition={{ duration: 0.4, type: 'spring', stiffness: 300 }}
-                  className={`relative z-10 w-[4.5rem] h-[4.5rem] rounded-2xl flex items-center justify-center ${
-                    isActive || isCurrent ? `bg-gradient-to-br ${stepItem.gradient}` : 'bg-slate-50 border border-slate-200'
-                  }`}
+                  className={`relative z-10 w-[4.5rem] h-[4.5rem] rounded-2xl flex items-center justify-center ${isActive || isCurrent ? `bg-gradient-to-br ${stepItem.gradient}` : 'bg-slate-50 border border-slate-200'
+                    }`}
                 >
                   <stepItem.icon size={26} className={isActive || isCurrent ? 'text-white' : 'text-slate-400'} strokeWidth={1.8} />
 
@@ -1629,13 +1627,12 @@ export function Step15Visual() {
                   opacity: isActive || isCurrent ? 1 : 0.5,
                 }}
                 transition={{ duration: 0.3 }}
-                className={`flex-1 p-4 rounded-xl transition-all ${
-                  isCurrent
-                    ? 'bg-white shadow-md border border-slate-200'
-                    : isActive
-                      ? 'bg-white/60'
-                      : ''
-                }`}
+                className={`flex-1 p-4 rounded-xl transition-all ${isCurrent
+                  ? 'bg-white shadow-md border border-slate-200'
+                  : isActive
+                    ? 'bg-white/60'
+                    : ''
+                  }`}
               >
                 <p className={`font-bold text-[15px] ${isCurrent ? 'text-slate-900' : 'text-slate-700'}`}>
                   {stepItem.label}

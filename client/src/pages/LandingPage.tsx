@@ -125,8 +125,8 @@ export default function LandingPage() {
                   id: 3,
                   title: "Look consistent and credible",
                   description: "Match your name, phone, and location across Google and GoodTherapy to build trust fast.",
-                  imageSrc: "/Gemini_Generated_Image_a7tbw7a7tbw7a7tb.png",
-                  imageClassName: "object-[center_15%] scale-110", // Zoom in and position to crop bottom logo
+                  imageSrc: "/Gemini_Generated_Image_idkavaidkavaidka.png",
+                  imageClassName: "object-top", // Position from top so GoodTherapy seal is visible
                 },
               ]}
               initialIndex={0}
