@@ -329,7 +329,7 @@ function StepTwoVisual() {
 function ContentBody({ content, stepId }: any) {
   const processText = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>)/g);
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>|<why>.*?<\/why>)/g);
     return parts.map((part: string, i: number) => {
       if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
         return (
@@ -380,6 +380,13 @@ function ContentBody({ content, stepId }: any) {
         return (
           <span key={i} className="font-bold text-[#A2AD1A]">
             {part.replace(/<\/?kw>/g, '')}
+          </span>
+        );
+      }
+      if (part.startsWith('<why>') && part.endsWith('</why>')) {
+        return (
+          <span key={i} className="block mt-4 mb-1 text-base font-extrabold text-orange-500 tracking-wide">
+            {part.replace(/<\/?why>/g, '')}
           </span>
         );
       }
@@ -917,7 +924,7 @@ function InteractiveChecklist({ content, stepId }: any) {
 
   const processChecklistText = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>)/g);
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>|<why>.*?<\/why>)/g);
     return parts.map((part: string, i: number) => {
       if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
         return <span key={i} className="font-extrabold text-[#A2AD1A] tracking-wide">{part.replace(/<\/?strong>/g, '')}</span>;
@@ -934,6 +941,9 @@ function InteractiveChecklist({ content, stepId }: any) {
       }
       if (part.startsWith('<kw>') && part.endsWith('</kw>')) {
         return <span key={i} className="font-bold text-[#A2AD1A]">{part.replace(/<\/?kw>/g, '')}</span>;
+      }
+      if (part.startsWith('<why>') && part.endsWith('</why>')) {
+        return <span key={i} className="block mt-4 mb-1 text-base font-extrabold text-orange-500 tracking-wide">{part.replace(/<\/?why>/g, '')}</span>;
       }
       return part;
     });

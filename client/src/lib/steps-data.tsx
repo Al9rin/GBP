@@ -177,7 +177,7 @@ export const STEPS: StepDef[] = [
         },
         {
           label: "No — service-area business",
-          description: "Choose \"No,\" add your <kw>service area</kw> (city/region where you serve clients), and continue. You must hide your address."
+          description: "Choose \"No\" if you do not see clients at that address. This includes telehealth-only, home-based practices that do not host clients, and providers who only want to show a general area. When you choose \"No,\" Google will show a <kw>service area</kw> instead of a street address. Add the city or region you serve and keep your address hidden."
         }
       ],
       note: "<strong>Important:</strong> If you work from home and do not serve clients at that address (e.g., telehealth only), you <strong>must</strong> select 'No' and hide your address. Displaying a residential address where you don't receive customers can lead to suspension.",
@@ -258,6 +258,7 @@ export const STEPS: StepDef[] = [
         "Search your business name on Google while logged into the right account",
         "Click \"Edit profile\" or \"Bookings\"",
         "Add your <a-gt>GoodTherapy profile link</a-gt> as the booking or appointment link",
+        "<why>Why this matters</why> When someone clicks \"Book\" or \"Appointment\" on your Google listing, they're trying to take action right away. If that button leads to your <a-gt>GoodTherapy profile</a-gt>, they land on a detailed, trusted page that matches your verified Google listing and helps them feel confident before they reach out. Google verification also helps you control and keep your listing information accurate, which supports credibility.",
         "Save"
       ],
       paragraphs: [

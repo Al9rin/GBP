@@ -59,8 +59,8 @@ export function GoogleSearchMockup({
           </div>
 
           <div className="flex items-center gap-4 ml-auto flex-shrink-0">
-            <div className="w-9 h-9 rounded-full bg-purple-600 text-white flex items-center justify-center text-sm font-medium shadow-sm">
-              {practiceExample.name[0]}
+            <div className="w-9 h-9 rounded-full text-white flex items-center justify-center text-sm font-bold shadow-sm" style={{ backgroundColor: '#A2AD1A' }}>
+              G
             </div>
           </div>
         </div>
