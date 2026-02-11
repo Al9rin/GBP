@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface ScrollIndicatorProps {
     scrollRef: React.RefObject<HTMLDivElement>;
@@ -8,19 +8,43 @@ interface ScrollIndicatorProps {
 
 export function ScrollIndicator({ scrollRef }: ScrollIndicatorProps) {
     const [isVisible, setIsVisible] = useState(true);
+    const [centerX, setCenterX] = useState<number | null>(null);
+
+    // Calculate the horizontal center of the scrollable content area
+    const updateCenterPosition = useCallback(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        setCenterX(rect.left + rect.width / 2);
+    }, [scrollRef]);
+
+    useEffect(() => {
+        updateCenterPosition();
+        window.addEventListener("resize", updateCenterPosition);
+        return () => window.removeEventListener("resize", updateCenterPosition);
+    }, [updateCenterPosition]);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (scrollRef.current) {
-                // Hide if scrolled more than 50px
-                setIsVisible(scrollRef.current.scrollTop < 50);
-            }
+            const el = scrollRef.current;
+            if (!el) return;
+
+            // Check if user is at the bottom (within 50px)
+            const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+            // Check if there's enough content to scroll
+            const hasScroll = el.scrollHeight > el.clientHeight + 50;
+
+            setIsVisible(hasScroll && !isAtBottom);
+
+            // Update horizontal center on scroll too (in case layout shifted)
+            const rect = el.getBoundingClientRect();
+            setCenterX(rect.left + rect.width / 2);
         };
 
         const element = scrollRef.current;
         if (element) {
-            element.addEventListener("scroll", handleScroll);
-            // Check initial scroll position
+            element.addEventListener("scroll", handleScroll, { passive: true });
+            // Check initial state
             handleScroll();
         }
 
@@ -31,6 +55,8 @@ export function ScrollIndicator({ scrollRef }: ScrollIndicatorProps) {
         };
     }, [scrollRef]);
 
+    if (centerX === null) return null;
+
     return (
         <AnimatePresence>
             {isVisible && (
@@ -38,7 +64,9 @@ export function ScrollIndicator({ scrollRef }: ScrollIndicatorProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute bottom-28 lg:bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-2"
+                    transition={{ duration: 0.3 }}
+                    style={{ left: centerX }}
+                    className="fixed bottom-28 lg:bottom-8 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2"
                 >
                     <span className="text-[10px] uppercase tracking-widest font-bold text-[#A2AD1A] bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-[#A2AD1A]/20">
                         Scroll for more

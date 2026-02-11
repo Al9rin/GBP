@@ -1,4 +1,5 @@
 import { STEPS } from "@/lib/steps-data";
+import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, CheckCircle, Sparkles, Search, Globe, TrendingUp,
@@ -6,7 +7,7 @@ import {
   Clock, Calendar, Camera, Send, ArrowRightCircle, Lock, ListChecks,
   Lightbulb, Info, AlertTriangle, ChevronRight, ChevronLeft, ExternalLink, Mail, Copy
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { EmailPopup } from "@/components/ui/EmailPopup";
 import { GoogleSearchMockup, GoogleMapsMockup } from "@/components/animated/ScreenshotMockups";
@@ -145,14 +146,7 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
             </div>
 
             {/* 2. Visual for this step */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="w-full max-w-4xl mx-auto mb-16 relative z-10"
-            >
-              <StepVisual stepId={step.id} />
-            </motion.div>
+            <InViewStepVisual stepId={step.id} />
 
             {/* 3. Footer: Coming Up + Button */}
             <motion.div
@@ -222,24 +216,40 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
 /*                          Step Visual Router                                 */
 /* -------------------------------------------------------------------------- */
 
-function StepVisual({ stepId }: { stepId: number }) {
+function InViewStepVisual({ stepId }: { stepId: number }) {
+  const { ref, isInView } = useInViewAnimation(0.15, true);
+  return (
+    <div ref={ref as React.RefObject<HTMLDivElement>}>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="w-full max-w-4xl mx-auto mb-16 relative z-10"
+      >
+        <StepVisual stepId={stepId} isInView={isInView} />
+      </motion.div>
+    </div>
+  );
+}
+
+function StepVisual({ stepId, isInView }: { stepId: number; isInView: boolean }) {
   switch (stepId) {
     case 1: return <IntroductionVisual />;
     case 2: return <StepTwoVisual />;
     case 3: return <Step3Visual />;
     case 4: return <Step4Visual />;
-    case 5: return <Step5Visual />;
-    case 6: return <Step6Visual />;
-    case 7: return <Step7Visual />;
-    case 8: return <Step8Visual />;
-    case 9: return <Step9Visual />;
-    case 10: return <Step10Visual />;
-    case 11: return <Step11Visual />;
-    case 12: return <Step12Visual />;
-    case 13: return <Step13Visual />;
-    case 14: return <Step14Visual />;
-    case 15: return <Step15Visual />;
-    case 16: return <Step16Visual />;
+    case 5: return <Step5Visual isInView={isInView} />;
+    case 6: return <Step6Visual isInView={isInView} />;
+    case 7: return <Step7Visual isInView={isInView} />;
+    case 8: return <Step8Visual isInView={isInView} />;
+    case 9: return <Step9Visual isInView={isInView} />;
+    case 10: return <Step10Visual isInView={isInView} />;
+    case 11: return <Step11Visual isInView={isInView} />;
+    case 12: return <Step12Visual isInView={isInView} />;
+    case 13: return <Step13Visual isInView={isInView} />;
+    case 14: return <Step14Visual isInView={isInView} />;
+    case 15: return <Step15Visual isInView={isInView} />;
+    case 16: return <Step16Visual isInView={isInView} />;
     case 17: return <Step17Visual />;
     default: return null;
   }
@@ -418,7 +428,7 @@ function ContentBody({ content, stepId }: any) {
               </div>
               <div>
                 <h3 className="font-bold text-slate-900 text-base mb-1">{feature.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{feature.desc}</p>
+                <p className="text-[17px] text-slate-500 leading-[1.8]">{feature.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -449,7 +459,7 @@ function ContentBody({ content, stepId }: any) {
               transition={{ delay: i * 0.05 }}
               className="flex items-start gap-3"
             >
-              <div className="mt-1.5 w-2.5 h-2.5 rounded-full bg-orange-400 shrink-0" />
+              <div className="mt-2.5 w-2 h-2 rounded-full bg-orange-400 shrink-0" />
               <span className="text-slate-700 text-[17px] leading-[1.8]">{processText(item)}</span>
             </motion.li>
           ))}
@@ -618,7 +628,7 @@ function ContentBody({ content, stepId }: any) {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900 mb-1">{option.label}</h4>
-                  <p className="text-sm text-slate-600 leading-relaxed">{option.description}</p>
+                  <p className="text-[17px] text-slate-600 leading-[1.8]">{option.description}</p>
                 </div>
               </div>
             </motion.div>
@@ -645,8 +655,8 @@ function ContentBody({ content, stepId }: any) {
                 transition={{ delay: idx * 0.08 }}
                 className={`p-4 rounded-xl ${c.bg} border ${c.border} shadow-sm`}
               >
-                <h4 className={`font-bold text-sm ${c.text} mb-1`}>{method.name}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">{method.steps}</p>
+                <h4 className={`font-bold text-base ${c.text} mb-1`}>{method.name}</h4>
+                <p className="text-[17px] text-slate-600 leading-[1.8]">{method.steps}</p>
               </motion.div>
             );
           })}
@@ -673,7 +683,7 @@ function ContentBody({ content, stepId }: any) {
                 {/* Section bullets */}
                 {section.bullets?.map((bullet: string, bi: number) => (
                   <div key={bi} className="flex items-start gap-3">
-                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <div className="mt-2.5 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                     <span className="text-[17px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
                   </div>
                 ))}
@@ -705,7 +715,7 @@ function ContentBody({ content, stepId }: any) {
                     <div className="absolute -top-2 left-4 bg-amber-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
                       Example
                     </div>
-                    <p className="text-[15px] text-slate-700 italic leading-relaxed mt-1">{processText(section.example)}</p>
+                    <p className="text-[17px] text-slate-700 italic leading-[1.8] mt-1">{processText(section.example)}</p>
                   </div>
                 </div>
               )}
@@ -748,7 +758,7 @@ function ContentBody({ content, stepId }: any) {
               </div>
               <div>
                 <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Pro Tip</span>
-                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.tip)}</p>
+                <p className="text-[17px] text-slate-700 leading-[1.8] mt-1">{processText(content.tip)}</p>
               </div>
             </div>
           </motion.div>
@@ -769,7 +779,7 @@ function ContentBody({ content, stepId }: any) {
               </div>
               <div>
                 <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Note</span>
-                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.note)}</p>
+                <p className="text-[17px] text-slate-700 leading-[1.8] mt-1">{processText(content.note)}</p>
               </div>
             </div>
           </motion.div>
@@ -790,7 +800,7 @@ function ContentBody({ content, stepId }: any) {
               </div>
               <div>
                 <span className="text-xs font-bold text-red-600 uppercase tracking-wider">Privacy</span>
-                <p className="text-sm text-slate-700 leading-relaxed mt-1">{processText(content.privacyTip)}</p>
+                <p className="text-[17px] text-slate-700 leading-[1.8] mt-1">{processText(content.privacyTip)}</p>
               </div>
             </div>
           </motion.div>
@@ -808,7 +818,7 @@ function ContentBody({ content, stepId }: any) {
             <div className="absolute -top-2.5 left-4 bg-amber-400 text-white text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider">
               Example
             </div>
-            <p className="text-sm text-slate-700 italic leading-relaxed mt-1">{content.example}</p>
+            <p className="text-[17px] text-slate-700 italic leading-[1.8] mt-1">{content.example}</p>
           </motion.div>
         )
       }
@@ -848,7 +858,7 @@ function ContentBody({ content, stepId }: any) {
                     {/* Section bullets */}
                     {section.bullets?.map((bullet: string, bi: number) => (
                       <div key={bi} className="flex items-start gap-3">
-                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                        <div className="mt-2.5 w-2 h-2 rounded-full bg-blue-500 shrink-0" />
                         <span className="text-[17px] text-slate-700 leading-[1.8]">{processText(bullet)}</span>
                       </div>
                     ))}
@@ -865,7 +875,7 @@ function ContentBody({ content, stepId }: any) {
                         )}>
                           {si + 1}
                         </div>
-                        <p className="text-xs text-slate-700 leading-relaxed">{processText(s)}</p>
+                        <p className="text-[17px] text-slate-700 leading-[1.8]">{processText(s)}</p>
                       </div>
                     ))}
                   </div>
@@ -884,7 +894,7 @@ function ContentBody({ content, stepId }: any) {
             animate={{ opacity: 1 }}
             className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200"
           >
-            <p className="text-sm text-slate-700 leading-relaxed font-medium">{processText(content.conclusion)}</p>
+            <p className="text-[17px] text-slate-700 leading-[1.8] font-medium">{processText(content.conclusion)}</p>
           </motion.div>
         )
       }
@@ -998,7 +1008,7 @@ function InteractiveChecklist({ content, stepId }: any) {
 
               {/* Text */}
               <span className={cn(
-                "text-sm leading-relaxed transition-colors flex-1",
+                "text-[17px] leading-[1.8] transition-colors flex-1",
                 checkedItems[idx] ? "text-green-800 line-through opacity-60" : "text-slate-700"
               )}>
                 {processChecklistText(item)}

@@ -94,7 +94,7 @@ export function Step4Visual() {
 // ==============================================================================
 // STEP 5: Sign In — Google sign-in with animated cursor flow
 // ==============================================================================
-export function Step5Visual() {
+export function Step5Visual({ isInView = false }: { isInView?: boolean }) {
   const [stage, setStage] = useState(0);
   // Stages: 0=idle, 1=typing email, 2=cursor to button, 3=clicking, 4=loading, 5=success
   const [emailText, setEmailText] = useState('');
@@ -102,6 +102,7 @@ export function Step5Visual() {
   const [clicking, setClicking] = useState(false);
 
   useEffect(() => {
+    if (!isInView) return;
     const email = 'your.name@gmail.com';
     let timeout: NodeJS.Timeout;
 
@@ -141,7 +142,7 @@ export function Step5Visual() {
     }, 4000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -256,7 +257,7 @@ export function Step5Visual() {
 // ==============================================================================
 // STEP 6: Practice Name — Search with typing, dropdown, cursor click
 // ==============================================================================
-export function Step6Visual() {
+export function Step6Visual({ isInView = false }: { isInView?: boolean }) {
   const [text, setText] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -264,6 +265,7 @@ export function Step6Visual() {
   const [clicking, setClicking] = useState(false);
 
   useEffect(() => {
+    if (!isInView) return;
     const fullText = 'Mindful Therapy Practice';
     let charIndex = 0;
     let timeout: NodeJS.Timeout;
@@ -291,7 +293,7 @@ export function Step6Visual() {
 
     timeout = setTimeout(typeChar, 600);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -384,7 +386,7 @@ export function Step6Visual() {
 // ==============================================================================
 // STEP 7: Category — Filterable dropdown with icons
 // ==============================================================================
-export function Step7Visual() {
+export function Step7Visual({ isInView = false }: { isInView?: boolean }) {
   const [searchText, setSearchText] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState('');
@@ -398,6 +400,7 @@ export function Step7Visual() {
   ];
 
   useEffect(() => {
+    if (!isInView) return;
     const fullText = 'Mental health';
     let charIndex = 0;
     let timeout: NodeJS.Timeout;
@@ -415,7 +418,7 @@ export function Step7Visual() {
 
     timeout = setTimeout(typeChar, 600);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [isInView]);
 
   const filtered = categories.filter(c =>
     c.name.toLowerCase().includes(searchText.toLowerCase()) || !searchText
@@ -518,15 +521,16 @@ export function Step7Visual() {
 // ==============================================================================
 // STEP 8: Location Display — Office vs Service Area with map sketches
 // ==============================================================================
-export function Step8Visual() {
+export function Step8Visual({ isInView = false }: { isInView?: boolean }) {
   const [mode, setMode] = useState<'office' | 'service'>('office');
 
   useEffect(() => {
+    if (!isInView) return;
     const timer = setInterval(() => {
       setMode(prev => (prev === 'office' ? 'service' : 'office'));
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isInView]);
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
@@ -663,7 +667,7 @@ export function Step8Visual() {
 // ==============================================================================
 // STEP 9: Contact Details — Phone + Website with validation animations
 // ==============================================================================
-export function Step9Visual() {
+export function Step9Visual({ isInView = false }: { isInView?: boolean }) {
   const [phone, setPhone] = useState('');
   const [website, setWebsite] = useState('');
   const [phoneValid, setPhoneValid] = useState(false);
@@ -671,6 +675,7 @@ export function Step9Visual() {
   const [activeField, setActiveField] = useState<'phone' | 'website' | 'done'>('phone');
 
   useEffect(() => {
+    if (!isInView) return;
     const phoneNumber = '(555) 123-4567';
     const websiteUrl = 'goodtherapy.org/therapists/yourname';
     let timeout: NodeJS.Timeout;
@@ -704,7 +709,7 @@ export function Step9Visual() {
 
     timeout = setTimeout(typePhone, 600);
     return () => clearTimeout(timeout);
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -821,15 +826,16 @@ export function Step9Visual() {
 // ==============================================================================
 // STEP 10: Verification — 2x2 grid with sequential highlights
 // ==============================================================================
-export function Step10Visual() {
+export function Step10Visual({ isInView = false }: { isInView?: boolean }) {
   const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
+    if (!isInView) return;
     const timer = setInterval(() => {
       setActiveIdx(prev => (prev + 1) % 4);
     }, 2500);
     return () => clearInterval(timer);
-  }, []);
+  }, [isInView]);
 
   const methods = [
     {
@@ -973,12 +979,13 @@ export function Step10Visual() {
 // ==============================================================================
 // STEP 11: Key Details — Hours + Description with typing
 // ==============================================================================
-export function Step11Visual() {
+export function Step11Visual({ isInView = false }: { isInView?: boolean }) {
   const [hoursVisible, setHoursVisible] = useState(0);
   const [descText, setDescText] = useState('');
   const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
+    if (!isInView) return;
     const hoursInterval = setInterval(() => {
       setHoursVisible(prev => (prev < 5 ? prev + 1 : 5));
     }, 350);
@@ -996,7 +1003,7 @@ export function Step11Visual() {
 
     setTimeout(typeDesc, 2200);
     return () => clearInterval(hoursInterval);
-  }, []);
+  }, [isInView]);
 
   const days = [
     { day: 'Mon', time: '9:00 AM - 5:00 PM' },
@@ -1072,11 +1079,12 @@ export function Step11Visual() {
 // ==============================================================================
 // STEP 12: Appointment Link — URL paste with preview build-up
 // ==============================================================================
-export function Step12Visual() {
+export function Step12Visual({ isInView = false }: { isInView?: boolean }) {
   const [stage, setStage] = useState(0);
   // 0=empty, 1=pasting, 2=validating, 3=valid, 4=preview
 
   useEffect(() => {
+    if (!isInView) return;
     const timings = [800, 1000, 1200, 800];
     let currentStage = 0;
 
@@ -1091,7 +1099,7 @@ export function Step12Visual() {
     };
 
     advance();
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -1185,7 +1193,7 @@ export function Step12Visual() {
 // ==============================================================================
 // STEP 13: Photos — Upload zone with progress rings
 // ==============================================================================
-export function Step13Visual() {
+export function Step13Visual({ isInView = false }: { isInView?: boolean }) {
   const [uploadedCount, setUploadedCount] = useState(0);
   const [uploadProgress, setUploadProgress] = useState([0, 0, 0]);
 
@@ -1196,6 +1204,7 @@ export function Step13Visual() {
   ];
 
   useEffect(() => {
+    if (!isInView) return;
     let photoIdx = 0;
 
     const uploadNext = () => {
@@ -1220,7 +1229,7 @@ export function Step13Visual() {
     };
 
     setTimeout(uploadNext, 1000);
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -1311,11 +1320,12 @@ export function Step13Visual() {
 // ==============================================================================
 // STEP 14: Send Link — Multi-stage share flow animation
 // ==============================================================================
-export function Step14Visual() {
+export function Step14Visual({ isInView = false }: { isInView?: boolean }) {
   const [stage, setStage] = useState(0);
   // 0=search result, 1=listing expanded, 2=share menu, 3=copied, 4=email compose, 5=sent
 
   useEffect(() => {
+    if (!isInView) return;
     const timings = [1500, 1500, 1500, 1500, 2000, 2000];
     let current = 0;
 
@@ -1333,7 +1343,7 @@ export function Step14Visual() {
     };
 
     advance();
-  }, []);
+  }, [isInView]);
 
   return (
     <DeviceFrame type="browser" className="max-w-2xl mx-auto">
@@ -1524,11 +1534,12 @@ export function Step14Visual() {
 // ==============================================================================
 // STEP 15: Discovery to Contact — Enhanced client journey timeline
 // ==============================================================================
-export function Step15Visual() {
+export function Step15Visual({ isInView = false }: { isInView?: boolean }) {
   const [activeStep, setActiveStep] = useState(0);
   const [lineHeight, setLineHeight] = useState(0);
 
   useEffect(() => {
+    if (!isInView) return;
     let step = 0;
     const timer = setInterval(() => {
       step = (step + 1) % 6;
@@ -1541,7 +1552,7 @@ export function Step15Visual() {
       }
     }, 1800);
     return () => clearInterval(timer);
-  }, []);
+  }, [isInView]);
 
   const steps = [
     { icon: Search, label: 'Client searches Google', desc: '"therapist near me" or your name', color: COLORS.blue, gradient: 'from-[#1a73e8] to-[#4285F4]' },
@@ -1661,15 +1672,16 @@ export function Step15Visual() {
 // ==============================================================================
 // STEP 16: Privacy & Ethics — Review response comparison
 // ==============================================================================
-export function Step16Visual() {
+export function Step16Visual({ isInView = false }: { isInView?: boolean }) {
   const [showCorrect, setShowCorrect] = useState(false);
 
   useEffect(() => {
+    if (!isInView) return;
     const timer = setInterval(() => {
       setShowCorrect(prev => !prev);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isInView]);
 
   return (
     <div className="w-full max-w-3xl mx-auto py-8 px-4 space-y-5">
