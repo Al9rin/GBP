@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
+import { setupAuth } from "./auth";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
@@ -10,17 +10,16 @@ declare global {
   namespace Express {
     interface User {
       id: string;
-      claims?: Record<string, unknown>;
-      access_token?: string;
-      refresh_token?: string;
-      expires_at?: number;
+      email: string | null;
+      firstName: string | null;
+      lastName: string | null;
+      profileImageUrl: string | null;
     }
   }
 }
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
-  await setupAuth(app);
-  registerAuthRoutes(app);
+  setupAuth(app);
 
   app.get(api.progress.get.path, async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
