@@ -191,7 +191,7 @@ export function GoogleMockup() {
                                         className="text-lg px-8 py-4 font-semibold shadow-2xl tracking-wide min-w-[200px]" // Standardized size
                                         borderRadius="100px"
                                     >
-                                        Get Started Now <ArrowRight className="w-5 h-5 ml-2" />
+                                        Start Step One <ArrowRight className="w-5 h-5 ml-2" />
                                     </ShimmerButton>
                                 </motion.div>
 
@@ -200,7 +200,7 @@ export function GoogleMockup() {
                                     whileTap={{ scale: 0.95 }}
                                 >
                                     <ShimmerButton
-                                        onClick={() => { }}
+                                        onClick={() => window.open("https://business.google.com", "_blank")}
                                         background="linear-gradient(to right, #1a73e8, #1557b0)"
                                         shimmerColor="#8ab4f8"
                                         className="text-lg px-8 py-4 font-semibold shadow-2xl tracking-wide min-w-[200px]"

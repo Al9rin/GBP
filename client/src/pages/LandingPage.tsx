@@ -29,7 +29,7 @@ export default function LandingPage() {
       action: () => window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     {
-      name: 'Contact us',
+      name: 'Get Help',
       url: '#',
       icon: Mail,
       iconRight: ExternalLink,

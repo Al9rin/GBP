@@ -1467,7 +1467,7 @@ export function Step14Visual({ isInView = false }: { isInView?: boolean }) {
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-slate-500 w-10 text-right">To:</span>
-                    <span className="font-medium text-slate-900">Editor@GoodTherapy.org</span>
+                    <span className="font-medium text-slate-900">editor@goodtherapy.org</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-slate-500 w-10 text-right">Subj:</span>

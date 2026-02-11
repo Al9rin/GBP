@@ -76,7 +76,7 @@ export const STEPS: StepDef[] = [
   },
   {
     id: 3,
-    title: "Why This Supports Your GoodTherapy Referrals",
+    title: "How This Supports Your GoodTherapy Referrals",
     description: "Understand the referral path you're building",
     icon: TrendingUp,
     type: "info",
@@ -115,7 +115,7 @@ export const STEPS: StepDef[] = [
   },
   {
     id: 5,
-    title: "Sign In and Start the Profile",
+    title: "Start Your Practice",
     description: "Get started with Google Business Profile",
     icon: LogIn,
     type: "info",
@@ -186,14 +186,14 @@ export const STEPS: StepDef[] = [
   },
   {
     id: 9,
-    title: "Add Contact Details and Your GoodTherapy Link",
+    title: "Add Contact Details\nand Your GoodTherapy Link",
     description: "Connect your profile to GoodTherapy",
     icon: Phone,
     type: "info",
     content: {
       steps: [
         "Add the phone number you want for new inquiries",
-        "For \"Website,\" use: your <a-gt>GoodTherapy profile link</a-gt> (if you do not have a separate practice website, or if you want GoodTherapy to be the main destination)",
+        "For \"Website,\" enter your practice website. If you do not have a website, use your <a-gt>GoodTherapy profile link</a-gt>",
         "Save and continue"
       ],
       tip: "<kw>Consistency</kw> helps. Use the same phone number and location/service area wherever possible so people do not get confused."
@@ -248,7 +248,7 @@ export const STEPS: StepDef[] = [
   },
   {
     id: 12,
-    title: "Add Your GoodTherapy Profile as Appointment Link",
+    title: "Add Your GoodTherapy Profile\nas Appointment Link",
     description: "Use the booking link feature if available",
     icon: Calendar,
     type: "info",
@@ -301,7 +301,7 @@ export const STEPS: StepDef[] = [
             "Click your listing",
             "Click \"Share\"",
             "Copy the link",
-            "Email it to Editor@GoodTherapy.org"
+            "Email it to <a-email>editor@goodtherapy.org</a-email>"
           ]
         },
         {
@@ -312,7 +312,7 @@ export const STEPS: StepDef[] = [
             "Tap your listing",
             "Tap \"Share\"",
             "Copy link",
-            "Email it to Editor@GoodTherapy.org"
+            "Email it to <a-email>editor@goodtherapy.org</a-email>"
           ]
         }
       ],
@@ -368,7 +368,7 @@ export const STEPS: StepDef[] = [
         "Added your <a-gt>GoodTherapy profile link</a-gt> as your Website link",
         "If available, added your <a-gt>GoodTherapy profile link</a-gt> as a Booking/Appointment link (Google supports adding links in the Bookings area)",
         "Added at least one professional photo or logo",
-        "Copied your public <a-gbp>Google Business Profile</a-gbp> link and sent it to Editor@GoodTherapy.org (many people copy it using the Share option in Search or Maps)"
+        "Copied your public <a-gbp>Google Business Profile</a-gbp> link and sent it to <a-email>editor@goodtherapy.org</a-email> (many people copy it using the Share option in Search or Maps)"
       ],
       whatHappensNext: {
         heading: "What happens next (so you know exactly what to do):",
@@ -378,7 +378,7 @@ export const STEPS: StepDef[] = [
             steps: [
               "Create or claim your <a-gbp>Google Business Profile</a-gbp>.",
               "Add your <a-gt>GoodTherapy profile</a-gt> as your Website link and, if Google shows it, as your Booking/Appointment link.",
-              "Copy the public share link to your Google listing (from Google Search or Google Maps) and email it to Editor@GoodTherapy.org."
+              "Copy the public share link to your Google listing (from Google Search or Google Maps) and email it to <a-email>editor@goodtherapy.org</a-email>."
             ]
           },
           {

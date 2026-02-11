@@ -92,22 +92,7 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
           className="w-full"
         >
           {/* Main Card Container */}
-          <div className={cn(
-            "relative bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border min-h-[600px] p-8 lg:p-16 transition-all duration-500",
-            step.id === 14 ? "border-amber-400 shadow-amber-100 ring-4 ring-amber-400/10" : "border-slate-100"
-          )}>
-            {/* Celebration Background for Step 14 */}
-            {step.id === 14 && (
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-amber-50/50 to-transparent opacity-60" />
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                  className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 blur-[100px] rounded-full"
-                />
-              </div>
-            )}
+          <div className="relative bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/60 overflow-hidden border border-slate-100 min-h-[600px] p-8 lg:p-16 transition-all duration-500">
 
             {/* 1. Header & Text Content */}
             <div className="max-w-3xl mx-auto text-center mb-10">
@@ -126,7 +111,12 @@ export function StepRenderer({ stepIndex, onNext, onPrev }: StepRendererProps) {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl lg:text-5xl font-serif font-semibold italic text-orange-500 mb-4 leading-tight tracking-tight"
               >
-                {step.title}
+                {step.title.includes('\n') ? step.title.split('\n').map((line: string, i: number) => (
+                  <span key={i}>
+                    {i > 0 && <br />}
+                    {line}
+                  </span>
+                )) : step.title}
               </motion.h1>
 
               {/* Description */}
@@ -339,7 +329,7 @@ function StepTwoVisual() {
 function ContentBody({ content, stepId }: any) {
   const processText = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<kw>.*?<\/kw>)/g);
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>)/g);
     return parts.map((part: string, i: number) => {
       if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
         return (
@@ -371,6 +361,18 @@ function ContentBody({ content, stepId }: any) {
             className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors"
           >
             {part.replace(/<\/?a-gbp>/g, '')}
+          </a>
+        );
+      }
+      if (part.startsWith('<a-email>') && part.endsWith('</a-email>')) {
+        const email = part.replace(/<\/?a-email>/g, '');
+        return (
+          <a
+            key={i}
+            href={`mailto:${email}`}
+            className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors"
+          >
+            {email}
           </a>
         );
       }
@@ -602,7 +604,7 @@ function ContentBody({ content, stepId }: any) {
 
       {/* Options / Choices (Step 8) */}
       {content.options && (
-        <div className="space-y-4 my-6">
+        <div className="space-y-4 my-6 mb-12">
           {content.question && (
             <p className="text-base font-medium text-slate-700 mb-4">{content.question}</p>
           )}
@@ -915,7 +917,7 @@ function InteractiveChecklist({ content, stepId }: any) {
 
   const processChecklistText = (text: string) => {
     if (!text) return null;
-    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<kw>.*?<\/kw>)/g);
+    const parts = text.split(/(<strong>.*?<\/strong>|<a-gt>.*?<\/a-gt>|<a-gbp>.*?<\/a-gbp>|<a-email>.*?<\/a-email>|<kw>.*?<\/kw>)/g);
     return parts.map((part: string, i: number) => {
       if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
         return <span key={i} className="font-extrabold text-[#A2AD1A] tracking-wide">{part.replace(/<\/?strong>/g, '')}</span>;
@@ -925,6 +927,10 @@ function InteractiveChecklist({ content, stepId }: any) {
       }
       if (part.startsWith('<a-gbp>') && part.endsWith('</a-gbp>')) {
         return <a key={i} href="https://business.google.com/ca-en/business-profile/?ppsrc=GPDA2" target="_blank" rel="noopener noreferrer" className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors" onClick={(e) => e.stopPropagation()}>{part.replace(/<\/?a-gbp>/g, '')}</a>;
+      }
+      if (part.startsWith('<a-email>') && part.endsWith('</a-email>')) {
+        const email = part.replace(/<\/?a-email>/g, '');
+        return <a key={i} href={`mailto:${email}`} className="font-bold text-[#1a73e8] hover:text-[#1557b0] underline decoration-[#1a73e8]/30 hover:decoration-[#1a73e8] transition-colors" onClick={(e) => e.stopPropagation()}>{email}</a>;
       }
       if (part.startsWith('<kw>') && part.endsWith('</kw>')) {
         return <span key={i} className="font-bold text-[#A2AD1A]">{part.replace(/<\/?kw>/g, '')}</span>;

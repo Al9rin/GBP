@@ -63,7 +63,7 @@ export default function GuidePage() {
       action: () => window.location.href = '/'
     },
     {
-      name: 'Contact us',
+      name: 'Get Help',
       url: '#',
       icon: Mail,
       iconRight: ExternalLink,
@@ -137,10 +137,9 @@ export default function GuidePage() {
                 onPrev={handlePrev}
               />
             </div>
+            {/* Scroll Indicator - Sticky inside scroll container, centered to card */}
+            <ScrollIndicator scrollRef={mainRef} />
           </div>
-
-          {/* Scroll Indicator - Positioned relative to this wrapper */}
-          <ScrollIndicator scrollRef={mainRef} />
         </div>
       </div>
 

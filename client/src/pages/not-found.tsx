@@ -14,7 +14,7 @@ export default function NotFound() {
       action: () => window.location.href = '/'
     },
     {
-      name: 'Contact us',
+      name: 'Get Help',
       url: '#',
       icon: Mail,
       iconRight: ExternalLink,
